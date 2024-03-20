@@ -1,18 +1,32 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#include <Wire.h>
+#include <dht11.h>
+
+dht11 dht;
+
+#define dht_pin A0
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(9600);
+
+  while(!Serial);
+
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  dht.read(dht_pin);
+  
+  int hum = dht.humidity;
+  float tempi = (float) dht.temperature;
+
+  Serial.print(hum);
+  Serial.print(" : ");
+  Serial.print(tempi);
+
+
+
+  delay(2000);
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}

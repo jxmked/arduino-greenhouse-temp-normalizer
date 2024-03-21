@@ -28,8 +28,6 @@ public:
 private:
   int _pinState;
   uint8_t _pin;
-}
+};
 
 #endif
-
-;

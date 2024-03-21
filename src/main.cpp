@@ -1,18 +1,12 @@
 #include <Arduino.h>
-
-#include <Wire.h>
-#include <dht11.h>
+#include "Button.h"
 
 #include <LiquidCrystal_I2C.h>
 
-#include "../lib/Button.cpp"
 
-dht11 dht;
+LiquidCrystal_I2C lcd(0x27,2,16);
 
-#define dht_pin A0
-
-
-LiquidCrystal_I2C lcd(0x27, 2, 16);
+//LiquidCrystal_I2C lcd(0x27, 2, 16);
 
 
 int counter = 0;

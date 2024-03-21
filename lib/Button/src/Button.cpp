@@ -1,6 +1,6 @@
+#include "Button.h"
 #include <Arduino.h>
 
-#include "Button.h"
 
 Button::Button(uint8_t pin) : _pin(pin),
                               _pinState(0)

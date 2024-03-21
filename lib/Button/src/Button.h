@@ -5,6 +5,11 @@
 
 class Button
 {
+
+private:
+  uint8_t pin;
+  int _pinState;
+
 public:
   Button(uint8_t pin);
 
@@ -25,9 +30,6 @@ public:
   const static bool PRESSED = LOW;
   const static bool RELEASED = HIGH;
 
-private:
-  int _pinState;
-  uint8_t _pin;
 };
 
 #endif

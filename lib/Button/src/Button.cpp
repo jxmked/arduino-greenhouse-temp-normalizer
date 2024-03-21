@@ -2,14 +2,14 @@
 #include <Arduino.h>
 
 
-Button::Button(uint8_t pin) : _pin(pin),
+Button::Button(uint8_t pin) : pin(pin),
                               _pinState(0)
 {
 }
 
 void Button::init()
 {
-  pinMode(_pin, INPUT_PULLUP);
+  pinMode(pin, INPUT_PULLUP);
 }
 
 bool Button::isPressed()
@@ -19,5 +19,5 @@ bool Button::isPressed()
 
 void Button::update()
 {
-  _pinState = digitalRead(_pin);
+  _pinState = digitalRead(pin);
 }

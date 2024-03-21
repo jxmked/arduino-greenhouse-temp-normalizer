@@ -3,30 +3,52 @@
 #include <Wire.h>
 #include <dht11.h>
 
+#include <LiquidCrystal_I2C.h>
+
+#include "../lib/Button.cpp"
+
 dht11 dht;
 
 #define dht_pin A0
 
+
+LiquidCrystal_I2C lcd(0x27, 2, 16);
+
+
+int counter = 0;
+Button plus(2);
+Button minus(4);
+
 void setup() {
-  Serial.begin(9600);
+  lcd.begin(2, 16);
+  lcd.backlight();
 
-  while(!Serial);
-
+  plus.init();
+  minus.init();
 
 }
 
-void loop() {
-  dht.read(dht_pin);
+void loop()
+{
+
+  plus.update();
+  minus.update();
+
+  if(plus.isPressed()) {
+    counter++;
+
+  }
+
+  if(minus.isPressed()) {
+    counter--;
+  }
+
+
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+
+  lcd.print(counter);
   
-  int hum = dht.humidity;
-  float tempi = (float) dht.temperature;
-
-  Serial.print(hum);
-  Serial.print(" : ");
-  Serial.print(tempi);
-
-
-
-  delay(2000);
+  delay(100);
 }
-

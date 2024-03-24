@@ -2,19 +2,19 @@
 
 #include <dht11.h>
 #include "DHTSensor.h"
+#include "TimeInterval.h"
 
 dht11 dht_sensor;
 
+/**
+ * unsigned long hz - must be greater than 1000
+*/
 DHTSensor::DHTSensor(uint8_t pin, unsigned long hz) : pin(pin),
-                                                             current_hum(0),
-                                                             current_temp(0),
-                                                             hz(hz)
+                                                      current_hum(0),
+                                                      current_temp(0),
+                                                      hz(hz),
+                                                      timeInterval(hz)
 {
-
-  if (hz < DHTSensor_DEFAULT_HZ)
-  {
-    hz = DHTSensor_DEFAULT_HZ;
-  }
 }
 
 unsigned long DHTSensor::currentMillis()
@@ -24,7 +24,8 @@ unsigned long DHTSensor::currentMillis()
 
 void DHTSensor::update()
 {
-  if (currentMillis() % hz != 0)
+  timeInterval.update();
+  if (timeInterval.marked())
     return;
 
   dht_sensor.read(pin);

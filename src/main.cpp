@@ -3,8 +3,6 @@
 #include "DHTSensor.h"
 #include "TimeInterval.h"
 #include <LiquidCrystal_I2C.h>
-#include "Osci.h"
-
 
 LiquidCrystal_I2C lcd(0x27, 2, 16);
 
@@ -17,9 +15,8 @@ Button plus(2);
 Button minus(4);
 
 DHTSensor sensor(P_SENSOR);
-TimeInterval errIval(500, true);
-Osci er(2000);
 
+TimeInterval lcdHz(500, true);
 
 void setup()
 {
@@ -31,28 +28,10 @@ void setup()
 
   minus.begin();
   minus.set_repeat(500, 200);
-
 }
 
 void loop()
 {
-
-  if(er.isHighest()) {
-    
-   // lcd.clear();
-    lcd.setCursor(5,0);
-    lcd.print("ERROR");
-
-  } else {
-    lcd.clear();
-  }
-
-
- // delay(10);
-
-
-
-  return;
 
   sensor.update();
 
@@ -66,20 +45,13 @@ void loop()
     counter--;
   }
 
-  lcd.clear();
-
-  lcd.setCursor(0, 0);
-  lcd.print(counter);
-
-  analogWrite(6, counter);
-
-  delay(500);
-
- // lcdHandler();
+  lcdHandler();
 }
 
 void lcdHandler()
 {
+  if(! lcdHz.marked()) return;
+
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Temp: ");

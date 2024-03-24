@@ -3,18 +3,18 @@
 
 #include "Arduino.h"
 
-class Osci {
-  public:
-    Osci(long interval);
-    float value();
-    bool isHighest();
-    bool isLowest();
-  
-  private:
-    long interval;
+class Osci
+{
+public:
+  Osci(long interval);
+  float value();
+  bool isHigh();
+  bool isLow();
 
-    float sineWave();
+private:
+  long interval;
 
+  float sineWave();
 };
 
 #endif

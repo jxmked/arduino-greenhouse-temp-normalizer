@@ -2,6 +2,7 @@
 #define DHTSensor_h
 
 #include "dht11.h"
+#include "TimeInterval.h"
 
 #define DHTSensor_DEFAULT_HZ 1000
 
@@ -20,6 +21,7 @@ private:
   float current_hum;
   float current_temp;
   unsigned long hz;
+  TimeInterval timeInterval;
 };
 
 #endif

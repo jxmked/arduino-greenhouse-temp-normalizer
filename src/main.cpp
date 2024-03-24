@@ -1,7 +1,10 @@
 #include <Arduino.h>
 #include "Button.h"
 #include "DHTSensor.h"
+#include "TimeInterval.h"
 #include <LiquidCrystal_I2C.h>
+#include "Osci.h"
+
 
 LiquidCrystal_I2C lcd(0x27, 2, 16);
 
@@ -14,36 +17,9 @@ Button plus(2);
 Button minus(4);
 
 DHTSensor sensor(P_SENSOR);
+TimeInterval errIval(500, true);
+Osci er(2000);
 
-
-int a =0;
-int b = 0;
-
-
-void foo() {
-  a++;
-  delay(2000);
-  yield();
-}
-
-void bar() {
-  b++;
-
-  delay(1000);
-
-  yield();
-}
-
-void printer() {
-  lcd.setCursor(0,0);
-  lcd.print(a);
-
-  lcd.setCursor(0, 1);
-  lcd.print(b);
-
-  delay(100);
-  yield();
-}
 
 void setup()
 {
@@ -56,22 +32,27 @@ void setup()
   minus.begin();
   minus.set_repeat(500, 200);
 
-  // Scheduler.startLoop(foo);
-  // Scheduler.startLoop(bar);
 }
 
 void loop()
 {
-  // printer();
 
-  // foo();
+  if(er.isHighest()) {
+    
+   // lcd.clear();
+    lcd.setCursor(5,0);
+    lcd.print("ERROR");
 
-  // bar();
+  } else {
+    lcd.clear();
+  }
+
+
+ // delay(10);
 
 
 
-
-  // return;
+  return;
 
   sensor.update();
 
@@ -85,8 +66,16 @@ void loop()
     counter--;
   }
 
-  lcdHandler();
-   yield();
+  lcd.clear();
+
+  lcd.setCursor(0, 0);
+  lcd.print(counter);
+
+  analogWrite(6, counter);
+
+  delay(500);
+
+ // lcdHandler();
 }
 
 void lcdHandler()

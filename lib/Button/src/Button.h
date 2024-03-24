@@ -19,7 +19,7 @@ class Button
 		bool released();
 		bool has_changed();
 		uint16_t repeat_count();
-		void set_repeat(int16_t delay_ms, int16_t repeat_ms);
+		void set_repeat(uint16_t delay_ms, int16_t repeat_ms);
 
 		const static bool PRESSED = LOW;
 		const static bool RELEASED = HIGH;

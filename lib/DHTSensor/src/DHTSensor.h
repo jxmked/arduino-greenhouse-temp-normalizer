@@ -1,28 +1,25 @@
 #ifndef DHTSensor_h
 #define DHTSensor_h
 
-
 #include "dht11.h"
 
+#define DHTSensor_DEFAULT_HZ 1000
 
+class DHTSensor
+{
+public:
+  DHTSensor(uint8_t pin, unsigned long hz = 1000);
+  void update();
+  float temperature();
+  float humidity();
 
+private:
+  unsigned long currentMillis();
 
-class DHTSensor {
-  public:
-    DHTSensor(uint8_t pin);
-    void update();
-    float temperature();
-    float humidity();
-
-  private:
-    uint8_t pin;
-    float current_temp;
-    float current_hum;
-    
-
+  uint8_t pin;
+  float current_hum;
+  float current_temp;
+  unsigned long hz;
 };
-
-
-
 
 #endif

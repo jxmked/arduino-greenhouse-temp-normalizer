@@ -103,7 +103,7 @@ bool Button::released()
 	return (read() == RELEASED && has_changed());
 }
 
-void Button::set_repeat(int16_t delay_ms, int16_t repeat_ms)
+void Button::set_repeat(uint16_t delay_ms, int16_t repeat_ms)
 {
 	_repeat_delay_ms = delay_ms > _delay ? delay_ms - _delay : 0;
 	_repeat_ms = repeat_ms;

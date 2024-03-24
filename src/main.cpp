@@ -2,7 +2,6 @@
 #include "Button.h"
 #include "DHTSensor.h"
 #include <LiquidCrystal_I2C.h>
-#include <Scheduler.h>
 
 LiquidCrystal_I2C lcd(0x27, 2, 16);
 
@@ -57,22 +56,22 @@ void setup()
   minus.begin();
   minus.set_repeat(500, 200);
 
-  Scheduler.startLoop(foo);
-  Scheduler.startLoop(bar);
+  // Scheduler.startLoop(foo);
+  // Scheduler.startLoop(bar);
 }
 
 void loop()
 {
-  printer();
+  // printer();
 
-  foo();
+  // foo();
 
-  bar();
-
-
+  // bar();
 
 
-  return;
+
+
+  // return;
 
   sensor.update();
 

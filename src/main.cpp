@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <Program.h>
+#include "Program.h"
 #include "Button.h"
 
 #define P_SENSOR A0
@@ -11,11 +11,11 @@ Button plus(P_INC_BTN);
 Button minus(P_DEC_BTN);
 Button enter(P_ETR_BTN);
 
-Program app();
+Program app;
 
 void setup()
 {
-
+  
   app.begin();
 
   plus.begin();
@@ -32,5 +32,7 @@ void setup()
 
 void loop()
 { 
+  app.update();
+  app.display();
 
 }

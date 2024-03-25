@@ -1,6 +1,6 @@
+#include "Program.h"
 #include <Arduino.h>
 
-#include "Program.h"
 #include <LiquidCrystal_I2C.h>
 
 #include "TimeInterval.h"
@@ -20,8 +20,8 @@ LiquidCrystal_I2C lcd(0x27, LCD_HEIGHT, LCD_WIDTH);
 
 const String BOOT_TEXT = "LOADING";
 
-TimeInterval lcd_hz(100);
-TimeInterval BOOT_BLINK(500);
+TimeInterval lcd_hz(200, true);
+TimeInterval BOOT_BLINK(1000, true);
 
 Program::Program() : status(BOOT),
                      currentInterval(0)
@@ -29,7 +29,7 @@ Program::Program() : status(BOOT),
 }
 
 void Program::begin() {
-  lcd.begin(LCD_WIDTH, LCD_HEIGHT);
+  lcd.begin(LCD_HEIGHT, LCD_WIDTH);
   lcd.backlight();
 }
 
@@ -79,14 +79,15 @@ void Program::display()
 
 void Program::showBoot()
 {
-  if(BOOT_BLINK.marked(500)) return;
+  if(!BOOT_BLINK.marked(1000)) return;
 
   // Lets center this string
-  const int half_width = LCD_WIDTH / 2;
-  const int half_string = round(BOOT_TEXT.length() / 2);
+  const uint8_t half_width = LCD_WIDTH / 2;
+  const uint8_t half_string = round(BOOT_TEXT.length() / 2);
 
-  lcd.setCursor(abs(half_width - half_string),0);
+  lcd.setCursor(abs(half_width - half_string), 0);
   lcd.print(BOOT_TEXT);
+ // lcd.print(abs(half_width - half_string));
 }
 
 E_PROGRAM_STATE Program::getStatus()

@@ -15,13 +15,21 @@ void TimeInterval::update() {
   time = millis();
 }
 
-bool TimeInterval::marked() {
+bool TimeInterval::marked(unsigned long holdMillis) {
   if(autoUpdate) update();
+  
+  const auto currentTime = time;
+  const unsigned long diff = currentTime - lastTime;
 
-  if(time - lastTime >= interval) {
-    lastTime = time;
+  if(diff >= interval) {
+    if(diff > holdMillis)
+      lastTime = currentTime;
     return true;
   }
 
   return false;
+}
+
+void TimeInterval::reset() {
+  lastTime = time;
 }

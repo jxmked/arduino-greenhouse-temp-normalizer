@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#include <dht11.h>
 #include "DHTSensor.h"
+#include <dht11.h>
 #include "TimeInterval.h"
 
 dht11 dht_sensor;
@@ -13,18 +13,12 @@ DHTSensor::DHTSensor(uint8_t pin, unsigned long hz) : pin(pin),
                                                       current_hum(0),
                                                       current_temp(0),
                                                       hz(hz),
-                                                      timeInterval(hz)
+                                                      timeInterval(hz, true)
 {
-}
-
-unsigned long DHTSensor::currentMillis()
-{
-  return millis();
 }
 
 void DHTSensor::update()
 {
-  timeInterval.update();
   if (timeInterval.marked())
     return;
 

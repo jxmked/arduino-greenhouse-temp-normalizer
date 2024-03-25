@@ -1,69 +1,36 @@
 #include <Arduino.h>
+#include <Program.h>
 #include "Button.h"
-#include "DHTSensor.h"
-#include "TimeInterval.h"
-#include <LiquidCrystal_I2C.h>
-
-LiquidCrystal_I2C lcd(0x27, 2, 16);
 
 #define P_SENSOR A0
+#define P_INC_BTN 2
+#define P_ETR_BTN 3
+#define P_DEC_BTN 4
 
-void lcdHandler();
+Button plus(P_INC_BTN);
+Button minus(P_DEC_BTN);
+Button enter(P_ETR_BTN);
 
-int counter = 0;
-Button plus(2);
-Button minus(4);
-
-DHTSensor sensor(P_SENSOR);
-
-TimeInterval lcdHz(500, true);
+Program app();
 
 void setup()
 {
-  lcd.begin(2, 16);
-  lcd.backlight();
+
+  app.begin();
 
   plus.begin();
   plus.set_repeat(500, 200);
 
   minus.begin();
   minus.set_repeat(500, 200);
+
+  enter.begin();
+  enter.set_repeat(5000, 10000);
+
+
 }
 
 void loop()
-{
+{ 
 
-  sensor.update();
-
-  if (plus.pressed())
-  {
-    counter++;
-  }
-
-  if (minus.pressed())
-  {
-    counter--;
-  }
-
-  lcdHandler();
-}
-
-void lcdHandler()
-{
-  if(! lcdHz.marked()) return;
-
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Temp: ");
-  lcd.print(sensor.temperature());
-  lcd.print((char)223);
-  lcd.printstr("Cel");
-
-  lcd.setCursor(0, 1);
-
-  lcd.print("Humd: ");
-  lcd.print(sensor.humidity());
-  lcd.printstr("%");
-
-  delay(100);
 }

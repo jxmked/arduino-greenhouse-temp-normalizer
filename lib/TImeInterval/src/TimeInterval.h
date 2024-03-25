@@ -8,7 +8,8 @@ class TimeInterval
 public:
   TimeInterval(unsigned long interval, bool autoUpdate = false);
   void update();
-  bool marked();
+  bool marked(unsigned long holdMillis=0);
+  void reset();
 
 private:
   unsigned long interval;

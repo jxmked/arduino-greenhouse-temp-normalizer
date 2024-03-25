@@ -15,8 +15,6 @@ public:
   float humidity();
 
 private:
-  unsigned long currentMillis();
-
   uint8_t pin;
   float current_hum;
   float current_temp;

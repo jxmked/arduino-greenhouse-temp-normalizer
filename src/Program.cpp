@@ -2,15 +2,12 @@
 #include <Arduino.h>
 
 #include <LiquidCrystal_I2C.h>
-
 #include "TimeInterval.h"
+#include "Helpers.h"
 
 // Liquid Crystal I2C Definition
 #define LCD_WIDTH 16
 #define LCD_HEIGHT 2
-
-
-#define BOOT_INTERVAL 3000 // 3 sec
 
 LiquidCrystal_I2C lcd(0x27, LCD_HEIGHT, LCD_WIDTH);
 
@@ -18,17 +15,38 @@ LiquidCrystal_I2C lcd(0x27, LCD_HEIGHT, LCD_WIDTH);
 // We need to define it as constant String type
 // So we can get the length method
 
-const String BOOT_TEXT = "LOADING";
-
 TimeInterval lcd_hz(200, true);
-TimeInterval BOOT_BLINK(1000, true);
+
+/** BOOT ANIMATION */
+const String BOOT_TEXT = "LOADING";
+const unsigned long BOOT_INTERVAL = 3000; // 3 sec
+TimeInterval BOOT_BLINK(800, true);
+
+void showBoot();
+
+/** END BOOT ANIMATION */
+
+
+/** INITIAL ANIMATION */
+const String INITIAL_TEXT_A = "GROUP 10 - AVT";
+const String INITIAL_TEXT_B = "S.Y. 2023-2024";
+const unsigned long INITIAL_INTERVAL = 5000; // 5 sec
+
+void showInitial();
+
+/** END INITIAL ANIMATION */
+
+unsigned long _lastTime = 0;
+E_PROGRAM_STATE _timeOwner = PRESET;
+E_PROGRAM_STATE _lastTimeOwner = PRESET;
 
 Program::Program() : status(BOOT),
                      currentInterval(0)
 {
 }
 
-void Program::begin() {
+void Program::begin()
+{
   lcd.begin(LCD_HEIGHT, LCD_WIDTH);
   lcd.backlight();
 }
@@ -59,10 +77,37 @@ void Program::pressIncrease()
 }
 void Program::update()
 {
+
+  switch (status)
+  {
+  case BOOT:
+    _timeOwner = BOOT;
+
+    if (_timeOwner != _lastTimeOwner)
+    {
+      _lastTimeOwner = BOOT;
+      _lastTime = getMillis();
+    }
+
+    if (isDiffAchieved(getMillis(), _lastTime, BOOT_INTERVAL))
+    {
+      status = INITIAL;
+    }
+
+    break;
+
+  case INITIAL:
+
+    break;
+
+  default:
+    break;
+  }
 }
 void Program::display()
 {
-  if(!lcd_hz.marked()) return;
+  if (!lcd_hz.marked())
+    return;
 
   lcd.clear();
 
@@ -71,26 +116,44 @@ void Program::display()
   case BOOT:
     showBoot();
     break;
-  
+
+  case INITIAL:
+    showInitial();
+    break;
+
   default:
     break;
   }
 }
 
-void Program::showBoot()
-{
-  if(!BOOT_BLINK.marked(1000)) return;
-
-  // Lets center this string
-  const uint8_t half_width = LCD_WIDTH / 2;
-  const uint8_t half_string = round(BOOT_TEXT.length() / 2);
-
-  lcd.setCursor(abs(half_width - half_string), 0);
-  lcd.print(BOOT_TEXT);
- // lcd.print(abs(half_width - half_string));
-}
-
 E_PROGRAM_STATE Program::getStatus()
 {
   return status;
+}
+
+/**
+ * Screen Display
+ */
+
+void showBoot()
+{
+  if (!BOOT_BLINK.marked(1000))
+    return;
+
+  // Lets center this string
+  const auto centered = centerText(BOOT_TEXT.length(), LCD_WIDTH);
+
+  lcd.setCursor(centered, 0);
+  lcd.print(BOOT_TEXT);
+}
+
+void showInitial() {
+  const auto ta = centerText(INITIAL_TEXT_A.length(), LCD_WIDTH);
+  const auto tb = centerText(INITIAL_TEXT_B.length(), LCD_WIDTH);
+
+  lcd.setCursor(ta, 0);
+  lcd.print(INITIAL_TEXT_A);
+
+  lcd.setCursor(tb, 1);
+  lcd.print(INITIAL_TEXT_B);
 }

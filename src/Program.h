@@ -9,7 +9,10 @@ enum E_PROGRAM_STATE
   INITIAL,
   HOME,
   SHOW_THRESHOLD,
-  SET_THRESHOLD
+  SET_THRESHOLD,
+  PRESET // We will set the program state variable 
+  // to PRESET as initial value since BOOT value
+  // a staten value and not an actual initial value
 };
 
 class Program
@@ -23,7 +26,6 @@ public:
   void pressIncrease();
   void update();
   void display();
-  void showBoot();
   E_PROGRAM_STATE getStatus();
 
 private:

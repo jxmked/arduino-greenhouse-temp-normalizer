@@ -1,6 +1,6 @@
 #include "Program.h"
 #include <Arduino.h>
-
+#include <E_PROGRAM_STATE.h>
 #include <LiquidCrystal_I2C.h>
 #include "TimeInterval.h"
 #include "Helpers.h"

@@ -5,6 +5,10 @@
 #include "TimeInterval.h"
 #include "Helpers.h"
 
+// Will include all screen files
+#include "Screens/index.cpp"
+
+
 // Liquid Crystal I2C Definition
 #define LCD_WIDTH 16
 #define LCD_HEIGHT 2
@@ -16,6 +20,11 @@ LiquidCrystal_I2C lcd(0x27, LCD_HEIGHT, LCD_WIDTH);
 // So we can get the length method
 
 TimeInterval lcd_hz(200, true);
+
+/**
+ * Screens
+*/
+
 
 /** BOOT ANIMATION */
 const String BOOT_TEXT = "LOADING";

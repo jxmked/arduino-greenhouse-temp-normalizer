@@ -10,9 +10,9 @@
 
 class BaseScreen {
   public:
-    BaseScreen(LiquidCrystal_I2C LCD, E_PROGRAM_STATE objectTargetState);
-    LiquidCrystal_I2C LCD;
+    BaseScreen(E_PROGRAM_STATE targetState, LiquidCrystal_I2C LCD);
     E_PROGRAM_STATE targetState;
+    LiquidCrystal_I2C LCD;
     
     virtual void update(void);
     virtual void display(void);

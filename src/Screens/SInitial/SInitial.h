@@ -1,5 +1,6 @@
-#ifndef SBoot_h
-#define SBoot_h
+#ifndef SInitial_h
+#define SInitial_h
+
 
 #include "Arduino.h"
 #include "../BaseScreen.h"
@@ -8,17 +9,18 @@
 #include "LiquidCrystal_I2C.h"
 #include "TimeInterval.h"
 
-class SBoot : public BaseScreen
+class SInitial : public BaseScreen
 {
 public:
-  SBoot();
-  
+  SInitial();
+   
   void update(unsigned long ms) override;
   void display(LiquidCrystal_I2C lcd) override;
 
   private:
-  String BOOT_TXT;
-  TimeInterval BLINK_PROG;
+  String TXT_A;
+  String TXT_B;
+
   bool isVisible;
   unsigned long initialMs;
 };

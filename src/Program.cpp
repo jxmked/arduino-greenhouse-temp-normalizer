@@ -22,18 +22,10 @@ TimeInterval lcd_hz(100, 0, true);
  */
 
 BaseScreen *screens[] = {
-    new SBoot()};
+    new SBoot(),
+    new SInitial()};
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
-
-/** INITIAL ANIMATION */
-const String INITIAL_TEXT_A = "GROUP 10 - AVT";
-const String INITIAL_TEXT_B = "S.Y. 2023-2024";
-const unsigned long INITIAL_INTERVAL = 5000; // 5 sec
-
-void showInitial();
-
-/** END INITIAL ANIMATION */
 
 unsigned long _lastTime = 0;
 E_PROGRAM_STATE _timeOwner = PRESET;
@@ -131,20 +123,4 @@ void Program::display()
 E_PROGRAM_STATE Program::getState()
 {
   return state;
-}
-
-/**
- * Screen Display
- */
-
-void showInitial()
-{
-  const auto ta = centerText(INITIAL_TEXT_A.length(), LCD_META.cols);
-  const auto tb = centerText(INITIAL_TEXT_B.length(), LCD_META.cols);
-
-  lcd.setCursor(ta, 0);
-  lcd.print(INITIAL_TEXT_A);
-
-  lcd.setCursor(tb, 1);
-  lcd.print(INITIAL_TEXT_B);
 }

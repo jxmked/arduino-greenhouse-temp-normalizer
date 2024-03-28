@@ -14,10 +14,13 @@ class BaseScreen {
     ~BaseScreen(void);
     E_PROGRAM_STATE targetState;
     unsigned long screenInterval;
-    virtual void begin(unsigned long initialMillis);
+    unsigned long initialMs;
+
+    void begin(unsigned long initialMillis);
     virtual void update(unsigned long ms);
     virtual void display(LiquidCrystal_I2C lcd);
-    virtual bool isEndOfInterval(void);
+    virtual bool isEndOfInterval(unsigned long ms);
+    
 };
 
 

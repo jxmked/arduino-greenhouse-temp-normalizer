@@ -12,16 +12,10 @@
 #define __BOOT_BLINK_INTERVAL 800 // 800 ms
 
 SBoot::SBoot() : BaseScreen(BOOT, __BOOT_INTERVAL), BOOT_TXT(__BOOT_TEXT),
-                 BLINK_INTERVAL(__BOOT_INTERVAL),
                  BLINK_PROG(__BOOT_BLINK_INTERVAL, 0, true),
                  isVisible(true),
                  initialMs(0)
 {
-}
-
-void SBoot::begin(unsigned long initialMillis)
-{
-  initialMs = initialMillis;
 }
 
 void SBoot::update(unsigned long ms)
@@ -38,9 +32,4 @@ void SBoot::display(LiquidCrystal_I2C LCD)
 
   LCD.setCursor(centered, 0);
   LCD.print(BOOT_TXT);
-}
-
-bool SBoot::isEndOfInterval()
-{
-  return (millis() - initialMs >= __BOOT_INTERVAL);
 }

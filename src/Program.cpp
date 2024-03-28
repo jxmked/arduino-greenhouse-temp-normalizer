@@ -4,16 +4,12 @@
 #include <LiquidCrystal_I2C.h>
 #include "TimeInterval.h"
 #include "Helpers.h"
+#include "LCD_META.h"
 
 // Will include all screen files
 #include "Screens/index.cpp"
 
-
-// Liquid Crystal I2C Definition
-#define LCD_WIDTH 16
-#define LCD_HEIGHT 2
-
-LiquidCrystal_I2C lcd(0x27, LCD_HEIGHT, LCD_WIDTH);
+LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.cols,LCD_META.rows);
 
 // Screen Text Definition.
 // We need to define it as constant String type
@@ -24,7 +20,9 @@ TimeInterval lcd_hz(200, true);
 /**
  * Screens
 */
-
+BaseScreen screens[] = {
+  SBoot(lcd)
+};
 
 /** BOOT ANIMATION */
 const String BOOT_TEXT = "LOADING";
@@ -56,7 +54,7 @@ Program::Program() : status(BOOT),
 
 void Program::begin()
 {
-  lcd.begin(LCD_HEIGHT, LCD_WIDTH);
+  lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
 }
 
@@ -150,15 +148,15 @@ void showBoot()
     return;
 
   // Lets center this string
-  const auto centered = centerText(BOOT_TEXT.length(), LCD_WIDTH);
+  const auto centered = centerText(BOOT_TEXT.length(), LCD_META.cols);
 
   lcd.setCursor(centered, 0);
   lcd.print(BOOT_TEXT);
 }
 
 void showInitial() {
-  const auto ta = centerText(INITIAL_TEXT_A.length(), LCD_WIDTH);
-  const auto tb = centerText(INITIAL_TEXT_B.length(), LCD_WIDTH);
+  const auto ta = centerText(INITIAL_TEXT_A.length(), LCD_META.cols);
+  const auto tb = centerText(INITIAL_TEXT_B.length(), LCD_META.cols);
 
   lcd.setCursor(ta, 0);
   lcd.print(INITIAL_TEXT_A);

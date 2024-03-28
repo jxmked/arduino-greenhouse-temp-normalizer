@@ -25,6 +25,7 @@ public:
   String BOOT_TXT;
   unsigned long BLINK_INTERVAL;
   TimeInterval BLINK_PROG;
+  bool isVisible;
 };
 
 #endif

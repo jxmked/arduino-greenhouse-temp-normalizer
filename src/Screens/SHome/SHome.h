@@ -5,8 +5,6 @@
 #include "../BaseScreen.h"
 
 #include "LiquidCrystal_I2C.h"
-#include "TimeInterval.h"
-#include "DHTSensor.h"
 
 class SHome : public BaseScreen {
 public:
@@ -14,12 +12,12 @@ public:
 
   void update(unsigned long ms) override;
   void display(LiquidCrystal_I2C lcd) override;
-  uint16_t refreshRate; // Sensor Refresh Rate
+  void updateReadings(float temp, float humd);
 
 private:
-  DHTSensor sensor;
   bool isVisible;
-  TimeInterval timeInterval;
+  float temperature;
+  float humidity;
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include "TimeInterval.h"
 #include "Helpers.h"
 #include "LCD_META.h"
+#include "DHTSensor.h"
+#include "PIN_DATA.h"
 
 // Will include all screen files
 #include "Screens/index.cpp"
@@ -20,15 +22,24 @@ LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 TimeInterval lcd_hz(200, 0, true);
 
 /**
+ * DHT Sensor
+*/
+DHTSensor mainSensor = DHTSensor(PIN_DATA.DHT_Sensor);
+TimeInterval mainSensorHz = TimeInterval(2000, 0, true);
+
+/** END DHT SENSOR */
+
+/**
  * Screens
  */
 SShow_Thres* __showthres__ = new SShow_Thres();
+SHome* __shome__ = new SHome();
 
 BaseScreen* screens[] = {
     __showthres__,
     new SBoot(),
     new SInitial(),
-    new SHome() };
+     __shome__ };
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
 
@@ -85,7 +96,14 @@ void Program::update() {
   const auto ms = millis();
 
   // Always Update Our Sensor Even in the Background
-  screens[3]->update(ms);
+  if (mainSensorHz.marked())
+    mainSensor.update();
+
+  /** Populate screens with datas */
+  __shome__->updateReadings(mainSensor.temperature(), mainSensor.humidity());
+  __showthres__->threshold = THRESHOLD;
+
+  /** End Populate screens with datas */
 
   for (int index = 0; index < screenLength; index++) {
     BaseScreen& scr = *screens[index];

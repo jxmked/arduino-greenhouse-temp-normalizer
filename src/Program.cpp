@@ -53,6 +53,15 @@ void Program::begin()
   lcd.backlight();
 
   __showthres__->threshold = DEFAULT_THRESHOLD;
+
+  const auto initialMillis = millis();
+
+  for (int index = 0; index < screenLength; index++)
+  {
+    BaseScreen &scr = *screens[index];
+
+    scr.begin(initialMillis);
+  }
 }
 
 void Program::show_threshold(unsigned long inMs)
@@ -74,9 +83,10 @@ void Program::pressIncrease()
 }
 void Program::update()
 {
+  const auto ms = millis();
 
   // Always Update Our Sensor Even in the Background
-  screens[3]->update(millis());
+  screens[3]->update(ms);
 
   for (int index = 0; index < screenLength; index++)
   {
@@ -85,7 +95,7 @@ void Program::update()
     if (scr.targetState != state)
       continue;
 
-    scr.update(millis());
+    scr.update(ms);
     break;
   }
 

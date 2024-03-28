@@ -15,7 +15,7 @@ Program app;
 
 void setup()
 {
-  
+
   app.begin();
 
   plus.begin();
@@ -26,19 +26,16 @@ void setup()
 
   enter.begin();
   enter.set_repeat(5000, 10000);
-
-
 }
 
 void loop()
-{ 
-  
-  if(enter.pressed()) {
+{
+
+  if (enter.pressed())
+  {
     app.pressEnter();
   }
 
   app.update();
-  
   app.display();
-
 }

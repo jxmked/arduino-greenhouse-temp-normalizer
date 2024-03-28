@@ -19,6 +19,9 @@ public:
   String BOOT_TXT;
   TimeInterval BLINK_PROG;
   bool isVisible;
+  
+  // Just for fun
+  int loading_value;
 };
 
 

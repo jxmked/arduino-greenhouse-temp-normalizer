@@ -6,6 +6,8 @@
 #include "Helpers.h"
 #include "LCD_META.h"
 
+#include <Wire.h>
+
 // Will include all screen files
 #include "Screens/index.cpp"
 
@@ -29,7 +31,6 @@ BaseScreen *screens[] = {
     new SBoot(),
     new SInitial(),
     new SHome()};
-
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
 
@@ -55,6 +56,11 @@ void Program::begin()
 
   __showthres__->threshold = DEFAULT_THRESHOLD;
 
+  Serial.begin(9600);
+
+  while (!Serial)
+    ;
+  Serial.print("FUck");
 }
 
 void Program::show_threshold(unsigned long inMs)
@@ -65,6 +71,10 @@ void Program::show_threshold(unsigned long inMs)
 
 void Program::pressEnter()
 {
+  state = SHOW_THRESHOLD;
+  _lastTime = millis();
+
+  Serial.print("ENTER PRESSED");
 }
 void Program::pressDecrease()
 {
@@ -115,11 +125,27 @@ void Program::update()
 
     if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval))
     {
-      state = HOME;
+      state = SHOW_THRESHOLD;
     }
     break;
 
   case HOME:
+    break;
+
+  case SHOW_THRESHOLD:
+    _timeOwner = SHOW_THRESHOLD;
+
+    if (_timeOwner != _lastTimeOwner)
+    {
+      _lastTimeOwner = SHOW_THRESHOLD;
+      _lastTime = millis();
+    }
+
+    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval))
+    {
+      state = HOME;
+    }
+
     break;
 
   default:

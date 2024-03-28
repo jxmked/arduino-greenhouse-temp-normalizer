@@ -9,7 +9,7 @@
 
 #define __THRES_TEXT "THRESHOLD"
 
-SShow_Thres::SShow_Thres() : BaseScreen(SHOW_THRESHOLD, 0),
+SShow_Thres::SShow_Thres() : BaseScreen(SHOW_THRESHOLD, 3000),
                              threshold(0),
                              isVisible(true),
                              txt(__THRES_TEXT)

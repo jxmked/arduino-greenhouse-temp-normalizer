@@ -32,7 +32,13 @@ void setup()
 
 void loop()
 { 
+  
+  if(enter.pressed()) {
+    app.pressEnter();
+  }
+
   app.update();
+  
   app.display();
 
 }

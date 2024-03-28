@@ -52,7 +52,7 @@ void Program::begin() {
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
 
-  __showthres__->threshold = DEFAULT_THRESHOLD;
+  __showthres__->threshold = THRESHOLD;
 
   const auto initialMillis = millis();
 

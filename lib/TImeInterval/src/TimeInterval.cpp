@@ -2,17 +2,18 @@
 #include <Arduino.h>
 
 
-TimeInterval::TimeInterval(unsigned long interval, bool autoUpdate):
+TimeInterval::TimeInterval(unsigned long interval, unsigned long offset,bool autoUpdate):
   interval(interval),
   autoUpdate(autoUpdate),
   lastTime(0),
-  time(0) {
+  time(0),
+  offset(offset) {
     update();
     lastTime = time;
   }
 
 void TimeInterval::update() {
-  time = millis();
+  time = millis() + offset;
 }
 
 bool TimeInterval::marked(unsigned long holdMillis) {

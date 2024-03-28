@@ -6,7 +6,7 @@
 class TimeInterval
 {
 public:
-  TimeInterval(unsigned long interval, bool autoUpdate = false);
+  TimeInterval(unsigned long interval, unsigned long offset = 0, bool autoUpdate = false);
   void update();
   bool marked(unsigned long holdMillis=0);
   void reset();
@@ -16,6 +16,7 @@ private:
   bool autoUpdate;
   unsigned long lastTime;
   unsigned long time;
+  unsigned long offset;
 };
 
 #endif

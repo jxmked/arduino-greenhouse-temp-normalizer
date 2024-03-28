@@ -10,12 +10,14 @@
 
 class BaseScreen {
   public:
-    BaseScreen(E_PROGRAM_STATE targetState, LiquidCrystal_I2C LCD);
+    BaseScreen(E_PROGRAM_STATE targetState, unsigned long scrIval);
+    ~BaseScreen(void);
     E_PROGRAM_STATE targetState;
-    LiquidCrystal_I2C LCD;
-    
-    virtual void update(void);
-    virtual void display(void);
+    unsigned long screenInterval;
+    virtual void begin(unsigned long initialMillis);
+    virtual void update(unsigned long ms);
+    virtual void display(LiquidCrystal_I2C lcd);
+    virtual bool isEndOfInterval(void);
 };
 
 

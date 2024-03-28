@@ -16,16 +16,21 @@
 class SBoot : public BaseScreen
 {
 public:
-  SBoot(LiquidCrystal_I2C LCD);
-
-  void update() override;
-  void display() override;
+  SBoot();
+   
+  void begin(unsigned long initialMillis) override;
+  void update(unsigned long ms) override;
+  void display(LiquidCrystal_I2C lcd) override;
+  bool isEndOfInterval(void) override;
 
   private:
   String BOOT_TXT;
   unsigned long BLINK_INTERVAL;
   TimeInterval BLINK_PROG;
   bool isVisible;
+  unsigned long initialMs;
 };
+
+
 
 #endif

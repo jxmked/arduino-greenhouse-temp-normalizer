@@ -15,10 +15,10 @@ public:
   void pressIncrease();
   void update();
   void display();
-  E_PROGRAM_STATE getStatus();
+  E_PROGRAM_STATE getState();
 
 private:
-  E_PROGRAM_STATE status;
+  E_PROGRAM_STATE state;
   unsigned long currentInterval;
   unsigned long getMillis();
   unsigned long getDiffMillis(unsigned long fromMs);

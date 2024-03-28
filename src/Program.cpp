@@ -9,30 +9,22 @@
 // Will include all screen files
 #include "Screens/index.cpp"
 
-LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.cols,LCD_META.rows);
+LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 
 // Screen Text Definition.
 // We need to define it as constant String type
 // So we can get the length method
 
-TimeInterval lcd_hz(200, true);
+TimeInterval lcd_hz(100, 0, true);
 
 /**
  * Screens
-*/
-BaseScreen screens[] = {
-  SBoot(lcd)
-};
+ */
 
-/** BOOT ANIMATION */
-const String BOOT_TEXT = "LOADING";
-const unsigned long BOOT_INTERVAL = 3000; // 3 sec
-TimeInterval BOOT_BLINK(800, true);
+BaseScreen *screens[] = {
+    new SBoot()};
 
-void showBoot();
-
-/** END BOOT ANIMATION */
-
+const int screenLength = sizeof(screens) / sizeof(screens[0]);
 
 /** INITIAL ANIMATION */
 const String INITIAL_TEXT_A = "GROUP 10 - AVT";
@@ -47,7 +39,11 @@ unsigned long _lastTime = 0;
 E_PROGRAM_STATE _timeOwner = PRESET;
 E_PROGRAM_STATE _lastTimeOwner = PRESET;
 
-Program::Program() : status(BOOT),
+// calling every screen as first boot since the currentFirst has been change
+bool firstCalled = true;
+E_PROGRAM_STATE currentFirst = BOOT;
+
+Program::Program() : state(BOOT),
                      currentInterval(0)
 {
 }
@@ -56,21 +52,14 @@ void Program::begin()
 {
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
-}
 
-unsigned long Program::getMillis()
-{
-  return millis();
-}
-unsigned long Program::getDiffMillis(unsigned long fromMs)
-{
-  return getMillis() - fromMs;
+  Serial.begin(9600);
 }
 
 void Program::show_threshold(unsigned long inMs)
 {
-  status = SHOW_THRESHOLD;
-  currentInterval = getMillis();
+  state = SHOW_THRESHOLD;
+  currentInterval = millis();
 }
 
 void Program::pressEnter()
@@ -85,7 +74,17 @@ void Program::pressIncrease()
 void Program::update()
 {
 
-  switch (status)
+  for (int index = 0; index < screenLength; index++)
+  {
+    BaseScreen &scr = *screens[index];
+
+    if (scr.targetState != state)
+      continue;
+
+    scr.update(millis());
+  }
+
+  switch (state)
   {
   case BOOT:
     _timeOwner = BOOT;
@@ -93,12 +92,12 @@ void Program::update()
     if (_timeOwner != _lastTimeOwner)
     {
       _lastTimeOwner = BOOT;
-      _lastTime = getMillis();
+      _lastTime = millis();
     }
 
-    if (isDiffAchieved(getMillis(), _lastTime, BOOT_INTERVAL))
+    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval))
     {
-      status = INITIAL;
+      state = INITIAL;
     }
 
     break;
@@ -118,43 +117,28 @@ void Program::display()
 
   lcd.clear();
 
-  switch (status)
+  for (int index = 0; index < screenLength; index++)
   {
-  case BOOT:
-    showBoot();
-    break;
+    BaseScreen &scr = *screens[index];
 
-  case INITIAL:
-    showInitial();
-    break;
+    if (scr.targetState != state)
+      continue;
 
-  default:
-    break;
+    scr.display(lcd);
   }
 }
 
-E_PROGRAM_STATE Program::getStatus()
+E_PROGRAM_STATE Program::getState()
 {
-  return status;
+  return state;
 }
 
 /**
  * Screen Display
  */
 
-void showBoot()
+void showInitial()
 {
-  if (!BOOT_BLINK.marked(1000))
-    return;
-
-  // Lets center this string
-  const auto centered = centerText(BOOT_TEXT.length(), LCD_META.cols);
-
-  lcd.setCursor(centered, 0);
-  lcd.print(BOOT_TEXT);
-}
-
-void showInitial() {
   const auto ta = centerText(INITIAL_TEXT_A.length(), LCD_META.cols);
   const auto tb = centerText(INITIAL_TEXT_B.length(), LCD_META.cols);
 

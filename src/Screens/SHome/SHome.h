@@ -4,7 +4,6 @@
 #include "Arduino.h"
 #include "../BaseScreen.h"
 
-#include <E_PROGRAM_STATE.h>
 #include "LiquidCrystal_I2C.h"
 #include "TimeInterval.h"
 #include "DHTSensor.h"

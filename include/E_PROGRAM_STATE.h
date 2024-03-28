@@ -30,6 +30,7 @@ enum E_PROGRAM_STATE
 
   
   RUN_TEST,
+  
   PRESET // We will set the program state variable 
   // to PRESET as initial value since BOOT value
   // a staten value and not an actual initial value

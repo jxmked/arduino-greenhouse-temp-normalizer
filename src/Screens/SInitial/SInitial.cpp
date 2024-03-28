@@ -3,7 +3,6 @@
 #include <E_PROGRAM_STATE.h>
 #include <LiquidCrystal_I2C.h>
 #include "../BaseScreen.h"
-#include "TimeInterval.h"
 #include "Helpers.h"
 #include "LCD_META.h"
 

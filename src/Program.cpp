@@ -9,6 +9,8 @@
 // Will include all screen files
 #include "Screens/index.cpp"
 
+#define DEFAULT_THRESHOLD 34
+
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 
 // Screen Text Definition.
@@ -20,11 +22,14 @@ TimeInterval lcd_hz(200, 0, true);
 /**
  * Screens
  */
+SShow_Thres *__showthres__ = new SShow_Thres();
 
 BaseScreen *screens[] = {
+    __showthres__,
     new SBoot(),
     new SInitial(),
     new SHome()};
+
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
 
@@ -48,7 +53,8 @@ void Program::begin()
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
 
-  Serial.begin(9600);
+  __showthres__->threshold = DEFAULT_THRESHOLD;
+
 }
 
 void Program::show_threshold(unsigned long inMs)
@@ -77,6 +83,7 @@ void Program::update()
       continue;
 
     scr.update(millis());
+    break;
   }
 
   switch (state)
@@ -90,7 +97,7 @@ void Program::update()
       _lastTime = millis();
     }
 
-    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval))
+    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval))
     {
       state = INITIAL;
     }
@@ -106,7 +113,7 @@ void Program::update()
       _lastTime = millis();
     }
 
-    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval))
+    if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval))
     {
       state = HOME;
     }
@@ -134,6 +141,7 @@ void Program::display()
       continue;
 
     scr.display(lcd);
+    break;
   }
 }
 

@@ -9,7 +9,7 @@
 #include "DHTSensor.h"
 #include "PIN_DATA.h"
 
-#define __SENSOR_REFRESH_RATE 2000
+#define __SENSOR_REFRESH_RATE 2000 // 2 sec
 
 SHome::SHome() : BaseScreen(HOME, 1),
                  refreshRate(__SENSOR_REFRESH_RATE),

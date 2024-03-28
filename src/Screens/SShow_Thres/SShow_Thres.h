@@ -1,25 +1,22 @@
-#ifndef SInitial_h
-#define SInitial_h
+#ifndef SShow_Thres_h
+#define SShow_Thres_h
 
 #include "Arduino.h"
 #include "../BaseScreen.h"
-
-#include <E_PROGRAM_STATE.h>
 #include "LiquidCrystal_I2C.h"
 
-class SInitial : public BaseScreen
+class SShow_Thres : public BaseScreen
 {
 public:
-  SInitial();
+  SShow_Thres();
+  unsigned long threshold;
 
   void update(unsigned long ms) override;
   void display(LiquidCrystal_I2C lcd) override;
 
 private:
-  String TXT_A;
-  String TXT_B;
-
   bool isVisible;
+  String txt;
 };
 
 #endif

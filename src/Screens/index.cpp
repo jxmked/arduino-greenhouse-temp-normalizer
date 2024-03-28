@@ -2,3 +2,4 @@
 #include "SBoot/SBoot.h"
 #include "SInitial/SInitial.h"
 #include "SHome/SHome.h"
+#include "SShow_Thres/SShow_Thres.h"

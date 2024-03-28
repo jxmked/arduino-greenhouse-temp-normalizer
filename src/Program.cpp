@@ -9,7 +9,7 @@
 // Will include all screen files
 #include "Screens/index.cpp"
 
-#define DEFAULT_THRESHOLD 34
+int THRESHOLD = 34;
 
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 
@@ -42,6 +42,9 @@ E_PROGRAM_STATE _lastTimeOwner = E_PROGRAM_STATE::PRESET;
 bool firstCalled = true;
 E_PROGRAM_STATE currentFirst = E_PROGRAM_STATE::BOOT;
 
+// Deny all button actions during boot...
+bool isReady = false;
+
 Program::Program() : state(E_PROGRAM_STATE::BOOT),
 currentInterval(0) { }
 
@@ -66,10 +69,18 @@ void Program::show_threshold(unsigned long ms) {
 }
 
 void Program::pressEnter() {
+  if (!isReady) return;
+
   show_threshold(millis());
 }
-void Program::pressDecrease() { }
-void Program::pressIncrease() { }
+void Program::pressDecrease() {
+  if (!isReady) return;
+
+}
+void Program::pressIncrease() {
+  if (!isReady) return;
+
+}
 void Program::update() {
   const auto ms = millis();
 
@@ -112,9 +123,12 @@ void Program::update() {
     if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval)) {
       state = E_PROGRAM_STATE::SHOW_THRESHOLD;
     }
+
     break;
 
   case E_PROGRAM_STATE::HOME:
+    isReady = true;
+
     break;
 
   case E_PROGRAM_STATE::SHOW_THRESHOLD:

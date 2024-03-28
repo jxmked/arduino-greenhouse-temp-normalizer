@@ -7,9 +7,9 @@ uint8_t centerText(uint8_t textLength, uint8_t maxTextWidth) {
   if (maxTextWidth - textLength == 2)
     return 1;
 
-  const uint8_t half_text_width = maxTextWidth / 2;
-  const uint8_t half_text_length = textLength / 2;
-  const uint8_t absValue = abs(half_text_width - half_text_length);
+  const float half_text_width = float(maxTextWidth) / 2.0;
+  const uint8_t half_text_length = float(textLength) / 2.0;
+  const uint8_t absValue = floor(half_text_width - half_text_length);
 
   return (absValue <= 0) ? 0 : absValue - 1;
 }

@@ -7,11 +7,13 @@
 #include "LCD_META.h"
 #include "DHTSensor.h"
 #include "PIN_DATA.h"
+#include "RelayController.h"
+#include "TemperatureController.h"
 
 // Will include all screen files
 #include "Screens/index.cpp"
 
-int THRESHOLD = 34;
+int THRESHOLD = 31;
 
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 
@@ -28,6 +30,16 @@ DHTSensor mainSensor = DHTSensor(PIN_DATA.DHT_Sensor);
 TimeInterval mainSensorHz = TimeInterval(2000, 0, true);
 
 /** END DHT SENSOR */
+
+/**
+ * Relay Controller and Logic
+*/
+RelayController recon = RelayController(PIN_DATA.Fan_Relay);
+TemperatureController tempCont = TemperatureController();
+
+
+
+/** END RELAY CONTROLLER AND LOGIC */
 
 /**
  * Screens
@@ -64,6 +76,9 @@ void Program::begin() {
   lcd.backlight();
 
   __showthres__->threshold = THRESHOLD;
+
+  recon.begin();
+  tempCont.begin();
 
   const auto initialMillis = millis();
 
@@ -105,6 +120,16 @@ void Program::update() {
 
   /** End Populate screens with datas */
 
+  tempCont.setThreshold(THRESHOLD);
+  tempCont.setTempHumd(mainSensor.temperature(), mainSensor.humidity());
+  tempCont.update(ms);
+
+  if(tempCont.isThresholdExceed()) {
+    recon.activate();
+  } else {
+    recon.deactivate();
+  }
+
   for (int index = 0; index < screenLength; index++) {
     BaseScreen& scr = *screens[index];
 
@@ -114,6 +139,8 @@ void Program::update() {
     scr.update(ms);
     break;
   }
+
+
 
   switch (state) {
   case E_PROGRAM_STATE::BOOT:
@@ -166,6 +193,8 @@ void Program::update() {
   default:
     break;
   }
+
+  recon.update(ms);
 }
 void Program::display() {
   if (!lcd_hz.marked())

@@ -10,6 +10,7 @@ RelayController::RelayController(uint8_t pin) :
 
 void RelayController::begin(void) {
   pinMode(pin, OUTPUT);
+  deactivate();
 }
 
 void RelayController::update(unsigned long ms) {

@@ -13,8 +13,7 @@ Button enter(P_ETR_BTN);
 
 Program app;
 
-void setup()
-{
+void setup() {
 
   app.begin();
 
@@ -28,11 +27,9 @@ void setup()
   enter.set_repeat(5000, 10000);
 }
 
-void loop()
-{
+void loop() {
 
-  if (enter.pressed())
-  {
+  if (enter.pressed()) {
     app.pressEnter();
   }
 

@@ -3,8 +3,7 @@
 
 #include "dht11.h"
 
-class DHTSensor
-{
+class DHTSensor {
 public:
   DHTSensor(uint8_t pin);
   void update();

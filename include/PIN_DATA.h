@@ -3,8 +3,7 @@
 
 #include "Arduino.h"
 
-struct PIN_DATA_T
-{
+struct PIN_DATA_T {
   uint8_t DHT_Sensor = A0;
 };
 

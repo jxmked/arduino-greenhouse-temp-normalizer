@@ -11,18 +11,13 @@
 #define __SINITIAL_INTERVAL 3000 // Display for 3 sec
 
 SInitial::SInitial() : BaseScreen(INITIAL, __SINITIAL_INTERVAL),
-                       TXT_A(__SINITIAL_TEXT_A),
-                       TXT_B(__SINITIAL_TEXT_B),
-                       isVisible(true)
-{
-}
+TXT_A(__SINITIAL_TEXT_A),
+TXT_B(__SINITIAL_TEXT_B),
+isVisible(true) { }
 
-void SInitial::update(unsigned long ms)
-{
-}
+void SInitial::update(unsigned long ms) { }
 
-void SInitial::display(LiquidCrystal_I2C LCD)
-{
+void SInitial::display(LiquidCrystal_I2C LCD) {
   if (!isVisible)
     return;
 

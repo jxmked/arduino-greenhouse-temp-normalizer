@@ -8,8 +8,7 @@
 #include "TimeInterval.h"
 #include "DHTSensor.h"
 
-class SHome : public BaseScreen
-{
+class SHome : public BaseScreen {
 public:
   SHome();
 

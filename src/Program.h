@@ -4,8 +4,7 @@
 #include "Arduino.h"
 #include <E_PROGRAM_STATE.h>
 
-class Program
-{
+class Program {
 public:
   Program();
   void begin();

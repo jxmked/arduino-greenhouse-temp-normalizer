@@ -5,25 +5,17 @@
 
 BaseScreen::BaseScreen(E_PROGRAM_STATE targetState, unsigned long scrIval) : targetState(targetState),
 
-                                                                             screenInterval(scrIval),
-                                                                             initialMs(0)
-{
-}
+screenInterval(scrIval),
+initialMs(0) { }
 
-void BaseScreen::begin(unsigned long initialMillis)
-{
+void BaseScreen::begin(unsigned long initialMillis) {
     initialMs = initialMillis;
 }
 
-void BaseScreen::update(unsigned long ms)
-{
-}
+void BaseScreen::update(unsigned long ms) { }
 
-void BaseScreen::display(LiquidCrystal_I2C lcd)
-{
-}
+void BaseScreen::display(LiquidCrystal_I2C lcd) { }
 
-bool BaseScreen::isEndOfInterval(unsigned long ms)
-{
-   return (ms - initialMs >= screenInterval);
+bool BaseScreen::isEndOfInterval(unsigned long ms) {
+    return (ms - initialMs >= screenInterval);
 }

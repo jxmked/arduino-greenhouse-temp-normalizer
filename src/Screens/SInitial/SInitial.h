@@ -7,8 +7,7 @@
 #include <E_PROGRAM_STATE.h>
 #include "LiquidCrystal_I2C.h"
 
-class SInitial : public BaseScreen
-{
+class SInitial : public BaseScreen {
 public:
   SInitial();
 

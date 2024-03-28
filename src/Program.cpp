@@ -22,13 +22,13 @@ TimeInterval lcd_hz(200, 0, true);
 /**
  * Screens
  */
-SShow_Thres *__showthres__ = new SShow_Thres();
+SShow_Thres* __showthres__ = new SShow_Thres();
 
-BaseScreen *screens[] = {
+BaseScreen* screens[] = {
     __showthres__,
     new SBoot(),
     new SInitial(),
-    new SHome()};
+    new SHome() };
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
 
@@ -43,12 +43,9 @@ bool firstCalled = true;
 E_PROGRAM_STATE currentFirst = BOOT;
 
 Program::Program() : state(BOOT),
-                     currentInterval(0)
-{
-}
+currentInterval(0) { }
 
-void Program::begin()
-{
+void Program::begin() {
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
 
@@ -56,41 +53,32 @@ void Program::begin()
 
   const auto initialMillis = millis();
 
-  for (int index = 0; index < screenLength; index++)
-  {
-    BaseScreen &scr = *screens[index];
+  for (int index = 0; index < screenLength; index++) {
+    BaseScreen& scr = *screens[index];
 
     scr.begin(initialMillis);
   }
 }
 
-void Program::show_threshold(unsigned long inMs)
-{
+void Program::show_threshold(unsigned long inMs) {
   state = SHOW_THRESHOLD;
   currentInterval = millis();
 }
 
-void Program::pressEnter()
-{
+void Program::pressEnter() {
   state = SHOW_THRESHOLD;
   _lastTime = millis();
 }
-void Program::pressDecrease()
-{
-}
-void Program::pressIncrease()
-{
-}
-void Program::update()
-{
+void Program::pressDecrease() { }
+void Program::pressIncrease() { }
+void Program::update() {
   const auto ms = millis();
 
   // Always Update Our Sensor Even in the Background
   screens[3]->update(ms);
 
-  for (int index = 0; index < screenLength; index++)
-  {
-    BaseScreen &scr = *screens[index];
+  for (int index = 0; index < screenLength; index++) {
+    BaseScreen& scr = *screens[index];
 
     if (scr.targetState != state)
       continue;
@@ -99,19 +87,16 @@ void Program::update()
     break;
   }
 
-  switch (state)
-  {
+  switch (state) {
   case BOOT:
     _timeOwner = BOOT;
 
-    if (_timeOwner != _lastTimeOwner)
-    {
+    if (_timeOwner != _lastTimeOwner) {
       _lastTimeOwner = BOOT;
       _lastTime = millis();
     }
 
-    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval))
-    {
+    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval)) {
       state = INITIAL;
     }
 
@@ -120,14 +105,12 @@ void Program::update()
   case INITIAL:
     _timeOwner = INITIAL;
 
-    if (_timeOwner != _lastTimeOwner)
-    {
+    if (_timeOwner != _lastTimeOwner) {
       _lastTimeOwner = INITIAL;
       _lastTime = millis();
     }
 
-    if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval))
-    {
+    if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval)) {
       state = SHOW_THRESHOLD;
     }
     break;
@@ -138,14 +121,12 @@ void Program::update()
   case SHOW_THRESHOLD:
     _timeOwner = SHOW_THRESHOLD;
 
-    if (_timeOwner != _lastTimeOwner)
-    {
+    if (_timeOwner != _lastTimeOwner) {
       _lastTimeOwner = SHOW_THRESHOLD;
       _lastTime = millis();
     }
 
-    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval))
-    {
+    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval)) {
       state = HOME;
     }
 
@@ -155,16 +136,14 @@ void Program::update()
     break;
   }
 }
-void Program::display()
-{
+void Program::display() {
   if (!lcd_hz.marked())
     return;
 
   lcd.clear();
 
-  for (int index = 0; index < screenLength; index++)
-  {
-    BaseScreen &scr = *screens[index];
+  for (int index = 0; index < screenLength; index++) {
+    BaseScreen& scr = *screens[index];
 
     if (scr.targetState != state)
       continue;
@@ -174,7 +153,6 @@ void Program::display()
   }
 }
 
-E_PROGRAM_STATE Program::getState()
-{
+E_PROGRAM_STATE Program::getState() {
   return state;
 }

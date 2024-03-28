@@ -12,25 +12,20 @@
 #define __SENSOR_REFRESH_RATE 2000 // 2 sec
 
 SHome::SHome() : BaseScreen(HOME, 1),
-                 refreshRate(__SENSOR_REFRESH_RATE),
-                 sensor(DHTSensor(PIN_DATA.DHT_Sensor)),
-                 isVisible(true),
-                 timeInterval(TimeInterval(__SENSOR_REFRESH_RATE, 0, true))
-{
-}
+refreshRate(__SENSOR_REFRESH_RATE),
+sensor(DHTSensor(PIN_DATA.DHT_Sensor)),
+isVisible(true),
+timeInterval(TimeInterval(__SENSOR_REFRESH_RATE, 0, true)) { }
 
-void SHome::update(unsigned long ms)
-{
+void SHome::update(unsigned long ms) {
 
-  if (timeInterval.marked())
-  {
+  if (timeInterval.marked()) {
     // Update sensor data
     sensor.update();
   }
 }
 
-void SHome::display(LiquidCrystal_I2C lcd)
-{
+void SHome::display(LiquidCrystal_I2C lcd) {
   if (!isVisible)
     return;
 

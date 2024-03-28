@@ -9,8 +9,7 @@
 
 #include "Arduino.h"
 
-class Button
-{
+class Button {
 public:
 	Button(uint8_t pin, uint16_t debounce_ms = 100);
 	void begin();

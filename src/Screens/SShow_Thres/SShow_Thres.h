@@ -5,8 +5,7 @@
 #include "../BaseScreen.h"
 #include "LiquidCrystal_I2C.h"
 
-class SShow_Thres : public BaseScreen
-{
+class SShow_Thres : public BaseScreen {
 public:
   SShow_Thres();
   unsigned long threshold;

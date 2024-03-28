@@ -10,18 +10,13 @@
 #define __THRES_TEXT "THRESHOLD"
 
 SShow_Thres::SShow_Thres() : BaseScreen(SHOW_THRESHOLD, 3000),
-                             threshold(0),
-                             isVisible(true),
-                             txt(__THRES_TEXT)
-{
-}
+threshold(0),
+isVisible(true),
+txt(__THRES_TEXT) { }
 
-void SShow_Thres::update(unsigned long ms)
-{
-}
+void SShow_Thres::update(unsigned long ms) { }
 
-void SShow_Thres::display(LiquidCrystal_I2C lcd)
-{
+void SShow_Thres::display(LiquidCrystal_I2C lcd) {
   if (!isVisible)
     return;
 

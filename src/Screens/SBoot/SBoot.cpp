@@ -12,14 +12,11 @@
 #define __BOOT_BLINK_INTERVAL 800 // 800 ms
 
 SBoot::SBoot() : BaseScreen(BOOT, __BOOT_INTERVAL), BOOT_TXT(__BOOT_TEXT),
-                 BLINK_PROG(__BOOT_BLINK_INTERVAL, 0, true),
-                 isVisible(true),
-                 loading_value(0)
-{
-}
+BLINK_PROG(__BOOT_BLINK_INTERVAL, 0, true),
+isVisible(true),
+loading_value(0) { }
 
-void SBoot::update(unsigned long ms)
-{
+void SBoot::update(unsigned long ms) {
   isVisible = !BLINK_PROG.marked(1000);
 
   const auto a = ms - initialMs;
@@ -31,10 +28,8 @@ void SBoot::update(unsigned long ms)
     loading_value = 100;
 }
 
-void SBoot::display(LiquidCrystal_I2C LCD)
-{
-  if (isVisible)
-  {
+void SBoot::display(LiquidCrystal_I2C LCD) {
+  if (isVisible) {
 
     const auto centered = centerText(BOOT_TXT.length(), LCD_META.rows);
 
@@ -48,12 +43,9 @@ void SBoot::display(LiquidCrystal_I2C LCD)
   // options to try and went to this.
   unsigned long numLen = 3;
 
-  if (loading_value < 10)
-  {
+  if (loading_value < 10) {
     numLen = 1;
-  }
-  else if (loading_value > 9 && loading_value < 100)
-  {
+  } else if (loading_value > 9 && loading_value < 100) {
     numLen = 2;
   }
 

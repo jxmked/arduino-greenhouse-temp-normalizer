@@ -22,7 +22,6 @@ public:
   String TXT_B;
 
   bool isVisible;
-  unsigned long initialMs;
 };
 
 

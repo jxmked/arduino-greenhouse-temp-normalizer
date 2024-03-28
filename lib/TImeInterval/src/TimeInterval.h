@@ -1,14 +1,12 @@
 #ifndef TimeInterval_h
 #define TimeInterval_h
 
-#include "Arduino.h"
-
 class TimeInterval
 {
 public:
   TimeInterval(unsigned long interval, unsigned long offset = 0, bool autoUpdate = false);
   void update();
-  bool marked(unsigned long holdMillis=0);
+  bool marked(unsigned long holdMillis = 0);
   void reset();
 
 private:

@@ -1,5 +1,5 @@
-#ifndef SBoot_h
-#define SBoot_h
+#ifndef SHome_h
+#define SHome_h
 
 #include "Arduino.h"
 #include "../BaseScreen.h"
@@ -7,21 +7,21 @@
 #include <E_PROGRAM_STATE.h>
 #include "LiquidCrystal_I2C.h"
 #include "TimeInterval.h"
+#include "DHTSensor.h"
 
-class SBoot : public BaseScreen
+class SHome : public BaseScreen
 {
 public:
-  SBoot();
-  
+  SHome();
+
   void update(unsigned long ms) override;
   void display(LiquidCrystal_I2C lcd) override;
+  uint16_t refreshRate; // Sensor Refresh Rate
 
-  private:
-  String BOOT_TXT;
-  TimeInterval BLINK_PROG;
+private:
+  DHTSensor sensor;
   bool isVisible;
+  TimeInterval timeInterval;
 };
-
-
 
 #endif

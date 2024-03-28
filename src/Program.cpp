@@ -15,7 +15,7 @@ LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 // We need to define it as constant String type
 // So we can get the length method
 
-TimeInterval lcd_hz(100, 0, true);
+TimeInterval lcd_hz(200, 0, true);
 
 /**
  * Screens
@@ -23,9 +23,12 @@ TimeInterval lcd_hz(100, 0, true);
 
 BaseScreen *screens[] = {
     new SBoot(),
-    new SInitial()};
+    new SInitial(),
+    new SHome()};
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
+
+/** END SCREENS */
 
 unsigned long _lastTime = 0;
 E_PROGRAM_STATE _timeOwner = PRESET;
@@ -95,7 +98,21 @@ void Program::update()
     break;
 
   case INITIAL:
+    _timeOwner = INITIAL;
 
+    if (_timeOwner != _lastTimeOwner)
+    {
+      _lastTimeOwner = INITIAL;
+      _lastTime = millis();
+    }
+
+    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval))
+    {
+      state = HOME;
+    }
+    break;
+
+  case HOME:
     break;
 
   default:

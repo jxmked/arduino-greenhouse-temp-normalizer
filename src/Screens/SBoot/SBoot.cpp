@@ -13,8 +13,7 @@
 
 SBoot::SBoot() : BaseScreen(BOOT, __BOOT_INTERVAL), BOOT_TXT(__BOOT_TEXT),
                  BLINK_PROG(__BOOT_BLINK_INTERVAL, 0, true),
-                 isVisible(true),
-                 initialMs(0)
+                 isVisible(true)
 {
 }
 

@@ -6,8 +6,6 @@
 #include "Helpers.h"
 #include "LCD_META.h"
 
-#include <Wire.h>
-
 // Will include all screen files
 #include "Screens/index.cpp"
 
@@ -55,12 +53,6 @@ void Program::begin()
   lcd.backlight();
 
   __showthres__->threshold = DEFAULT_THRESHOLD;
-
-  Serial.begin(9600);
-
-  while (!Serial)
-    ;
-  Serial.print("FUck");
 }
 
 void Program::show_threshold(unsigned long inMs)
@@ -73,8 +65,6 @@ void Program::pressEnter()
 {
   state = SHOW_THRESHOLD;
   _lastTime = millis();
-
-  Serial.print("ENTER PRESSED");
 }
 void Program::pressDecrease()
 {
@@ -84,6 +74,9 @@ void Program::pressIncrease()
 }
 void Program::update()
 {
+
+  // Always Update Our Sensor Even in the Background
+  screens[3]->update(millis());
 
   for (int index = 0; index < screenLength; index++)
   {

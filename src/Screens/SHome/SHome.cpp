@@ -11,7 +11,7 @@
 
 #define __SENSOR_REFRESH_RATE 2000 // 2 sec
 
-SHome::SHome() : BaseScreen(HOME, 1),
+SHome::SHome() : BaseScreen(E_PROGRAM_STATE::HOME, 1),
 refreshRate(__SENSOR_REFRESH_RATE),
 sensor(DHTSensor(PIN_DATA.DHT_Sensor)),
 isVisible(true),

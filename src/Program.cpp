@@ -35,14 +35,14 @@ const int screenLength = sizeof(screens) / sizeof(screens[0]);
 /** END SCREENS */
 
 unsigned long _lastTime = 0;
-E_PROGRAM_STATE _timeOwner = PRESET;
-E_PROGRAM_STATE _lastTimeOwner = PRESET;
+E_PROGRAM_STATE _timeOwner = E_PROGRAM_STATE::PRESET;
+E_PROGRAM_STATE _lastTimeOwner = E_PROGRAM_STATE::PRESET;
 
 // calling every screen as first boot since the currentFirst has been change
 bool firstCalled = true;
-E_PROGRAM_STATE currentFirst = BOOT;
+E_PROGRAM_STATE currentFirst = E_PROGRAM_STATE::BOOT;
 
-Program::Program() : state(BOOT),
+Program::Program() : state(E_PROGRAM_STATE::BOOT),
 currentInterval(0) { }
 
 void Program::begin() {
@@ -60,14 +60,13 @@ void Program::begin() {
   }
 }
 
-void Program::show_threshold(unsigned long inMs) {
-  state = SHOW_THRESHOLD;
-  currentInterval = millis();
+void Program::show_threshold(unsigned long ms) {
+  state = E_PROGRAM_STATE::SHOW_THRESHOLD;
+  _lastTime = ms;
 }
 
 void Program::pressEnter() {
-  state = SHOW_THRESHOLD;
-  _lastTime = millis();
+  show_threshold(millis());
 }
 void Program::pressDecrease() { }
 void Program::pressIncrease() { }
@@ -88,46 +87,46 @@ void Program::update() {
   }
 
   switch (state) {
-  case BOOT:
-    _timeOwner = BOOT;
+  case E_PROGRAM_STATE::BOOT:
+    _timeOwner = E_PROGRAM_STATE::BOOT;
 
     if (_timeOwner != _lastTimeOwner) {
-      _lastTimeOwner = BOOT;
+      _lastTimeOwner = E_PROGRAM_STATE::BOOT;
       _lastTime = millis();
     }
 
     if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval)) {
-      state = INITIAL;
+      state = E_PROGRAM_STATE::INITIAL;
     }
 
     break;
 
-  case INITIAL:
-    _timeOwner = INITIAL;
+  case E_PROGRAM_STATE::INITIAL:
+    _timeOwner = E_PROGRAM_STATE::INITIAL;
 
     if (_timeOwner != _lastTimeOwner) {
-      _lastTimeOwner = INITIAL;
+      _lastTimeOwner = E_PROGRAM_STATE::INITIAL;
       _lastTime = millis();
     }
 
     if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval)) {
-      state = SHOW_THRESHOLD;
+      state = E_PROGRAM_STATE::SHOW_THRESHOLD;
     }
     break;
 
-  case HOME:
+  case E_PROGRAM_STATE::HOME:
     break;
 
-  case SHOW_THRESHOLD:
-    _timeOwner = SHOW_THRESHOLD;
+  case E_PROGRAM_STATE::SHOW_THRESHOLD:
+    _timeOwner = E_PROGRAM_STATE::SHOW_THRESHOLD;
 
     if (_timeOwner != _lastTimeOwner) {
-      _lastTimeOwner = SHOW_THRESHOLD;
+      _lastTimeOwner = E_PROGRAM_STATE::SHOW_THRESHOLD;
       _lastTime = millis();
     }
 
     if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval)) {
-      state = HOME;
+      state = E_PROGRAM_STATE::HOME;
     }
 
     break;

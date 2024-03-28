@@ -10,7 +10,7 @@
 #define __SINITIAL_TEXT_B "S.Y. 2023-2024"
 #define __SINITIAL_INTERVAL 3000 // Display for 3 sec
 
-SInitial::SInitial() : BaseScreen(INITIAL, __SINITIAL_INTERVAL),
+SInitial::SInitial() : BaseScreen(E_PROGRAM_STATE::INITIAL, __SINITIAL_INTERVAL),
 TXT_A(__SINITIAL_TEXT_A),
 TXT_B(__SINITIAL_TEXT_B),
 isVisible(true) { }

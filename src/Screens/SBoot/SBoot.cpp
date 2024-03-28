@@ -7,11 +7,13 @@
 #include "Helpers.h"
 #include "LCD_META.h"
 
+
+
 #define __BOOT_TEXT "LOADING"
 #define __BOOT_INTERVAL 3000      // Display for 3 sec
 #define __BOOT_BLINK_INTERVAL 800 // 800 ms
 
-SBoot::SBoot() : BaseScreen(BOOT, __BOOT_INTERVAL), BOOT_TXT(__BOOT_TEXT),
+SBoot::SBoot() : BaseScreen(E_PROGRAM_STATE::BOOT, __BOOT_INTERVAL), BOOT_TXT(__BOOT_TEXT),
 BLINK_PROG(__BOOT_BLINK_INTERVAL, 0, true),
 isVisible(true),
 loading_value(0) { }

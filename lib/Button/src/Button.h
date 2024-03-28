@@ -1,9 +1,8 @@
-/*
-	Button - a small library for Arduino to handle button debouncing
-
-	MIT licensed.
+/**
+ * Button - a small library for Arduino to handle button debouncing
+ * 
+ * MIT licensed.
 */
-
 #ifndef Button_h
 #define Button_h
 

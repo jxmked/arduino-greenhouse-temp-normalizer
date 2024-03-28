@@ -1,7 +1,7 @@
 #ifndef E_PROGRAM_STATE_H
 #define E_PROGRAM_STATE_H
 
-enum E_PROGRAM_STATE {
+enum class E_PROGRAM_STATE {
   /**
    * Were loading text would appear for a few seconds
   */

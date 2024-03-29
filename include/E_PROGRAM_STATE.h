@@ -23,12 +23,17 @@ enum class E_PROGRAM_STATE {
   SHOW_THRESHOLD,
 
   /**
-   * Set/Modify threshold
+   * * Set Temperature Threshold
+   * * Configure Backlight
+   * * * KEEP ON
+   * * * KEEP OFF
+   * * * INTERVAL & NEAR THRESHOLD
+   * * RUN FAN TEST
+   * * STATUS
+   * * * ACTIVE
+   * * * DEACTIVE
   */
-  SET_THRESHOLD,
-
-
-  RUN_TEST,
+  CONFIG,
 
   PRESET // We will set the program state variable 
   // to PRESET as initial value since BOOT value

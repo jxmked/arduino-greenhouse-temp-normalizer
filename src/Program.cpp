@@ -99,14 +99,25 @@ void Program::pressEnter() {
 
   show_threshold(millis());
 }
+
 void Program::pressDecrease() {
   if (!isReady) return;
 
+  show_threshold(millis());
+
+  THRESHOLD--;
 }
+
 void Program::pressIncrease() {
   if (!isReady) return;
+  show_threshold(millis());
 
+  THRESHOLD++;
 }
+
+
+/********** UPDATE ***********/
+
 void Program::update() {
   const auto ms = millis();
 
@@ -124,7 +135,7 @@ void Program::update() {
   tempCont.setTempHumd(mainSensor.temperature(), mainSensor.humidity());
   tempCont.update(ms);
 
-  if(tempCont.isThresholdExceed()) {
+  if (isReady && tempCont.isThresholdExceed()) {
     recon.activate();
   } else {
     recon.deactivate();
@@ -140,17 +151,18 @@ void Program::update() {
     break;
   }
 
+  // Update time interval
+  // and time owner
+  _timeOwner = state;
 
+  if (_timeOwner != _lastTimeOwner) {
+    _lastTimeOwner = _timeOwner;
+    _lastTime = millis();
+  }
+  /////////////////////////////
 
   switch (state) {
   case E_PROGRAM_STATE::BOOT:
-    _timeOwner = E_PROGRAM_STATE::BOOT;
-
-    if (_timeOwner != _lastTimeOwner) {
-      _lastTimeOwner = E_PROGRAM_STATE::BOOT;
-      _lastTime = millis();
-    }
-
     if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval)) {
       state = E_PROGRAM_STATE::INITIAL;
     }
@@ -158,13 +170,6 @@ void Program::update() {
     break;
 
   case E_PROGRAM_STATE::INITIAL:
-    _timeOwner = E_PROGRAM_STATE::INITIAL;
-
-    if (_timeOwner != _lastTimeOwner) {
-      _lastTimeOwner = E_PROGRAM_STATE::INITIAL;
-      _lastTime = millis();
-    }
-
     if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval)) {
       state = E_PROGRAM_STATE::SHOW_THRESHOLD;
     }
@@ -177,13 +182,6 @@ void Program::update() {
     break;
 
   case E_PROGRAM_STATE::SHOW_THRESHOLD:
-    _timeOwner = E_PROGRAM_STATE::SHOW_THRESHOLD;
-
-    if (_timeOwner != _lastTimeOwner) {
-      _lastTimeOwner = E_PROGRAM_STATE::SHOW_THRESHOLD;
-      _lastTime = millis();
-    }
-
     if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval)) {
       state = E_PROGRAM_STATE::HOME;
     }
@@ -195,7 +193,14 @@ void Program::update() {
   }
 
   recon.update(ms);
-}
+}\
+
+
+/************** END UPDATE ***************/
+
+
+/************** DISPLAY ******************/
+
 void Program::display() {
   if (!lcd_hz.marked())
     return;
@@ -213,6 +218,14 @@ void Program::display() {
   }
 }
 
+
+/************ END DISPLAY ****************/
+
+
 E_PROGRAM_STATE Program::getState() {
   return state;
+}
+
+void Program::configMode() {
+
 }

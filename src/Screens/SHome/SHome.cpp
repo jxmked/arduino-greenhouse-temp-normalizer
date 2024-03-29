@@ -5,9 +5,6 @@
 #include "../BaseScreen.h"
 #include "Helpers.h"
 #include "LCD_META.h"
-#include "DHTSensor.h"
-
-#define __SENSOR_REFRESH_RATE 2000 // 2 sec
 
 SHome::SHome() : BaseScreen(E_PROGRAM_STATE::HOME, 1),
 isVisible(true),
@@ -20,14 +17,17 @@ void SHome::display(LiquidCrystal_I2C lcd) {
   if (!isVisible)
     return;
 
-  lcd.setCursor(0, 0);
-  lcd.print("Temp:");
+  const auto ta = centerText(14, LCD_META.rows);
+  const auto tb = centerText(14, LCD_META.rows);
+
+  lcd.setCursor(ta, 0);
+  lcd.print("Temp: ");
   lcd.print(temperature);
   lcd.print((char)223);
   lcd.print("C");
 
-  lcd.setCursor(0, 1);
-  lcd.print("Humd:");
+  lcd.setCursor(tb, 1);
+  lcd.print("Humd: ");
   lcd.print(humidity);
   lcd.print("%");
 }

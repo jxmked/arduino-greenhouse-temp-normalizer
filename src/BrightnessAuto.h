@@ -12,13 +12,13 @@ public:
   int threshold;
   int brightness; // 0 - 100
   E_SCREEN_META meta;
-  int nearBright; // ±1 to trigger
+  int nearBright; // ±1 degree celsius to trigger
   void update(unsigned long ms);
 
   const int TRANSITION_INTERVAL = 1500; // 1.5 sec
 
   private:
-    unsigned long lastInterval;
+    unsigned long lastIntervalA;
     bool onAnimate;
     bool onIncrease;
 

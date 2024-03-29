@@ -7,8 +7,6 @@
 #include "Helpers.h"
 #include "LCD_META.h"
 
-
-
 #define __BOOT_TEXT "LOADING"
 #define __BOOT_INTERVAL 3000      // Display for 3 sec
 #define __BOOT_BLINK_INTERVAL 800 // 800 ms
@@ -31,13 +29,6 @@ void SBoot::update(unsigned long ms) {
 }
 
 void SBoot::display(LiquidCrystal_I2C LCD) {
-  if (isVisible) {
-
-    const auto centered = centerText(BOOT_TXT.length(), LCD_META.rows);
-
-    LCD.setCursor(centered, 0);
-    LCD.print(BOOT_TXT);
-  }
 
   // Length of a number.
   // I have tried to convert number to string
@@ -52,6 +43,14 @@ void SBoot::display(LiquidCrystal_I2C LCD) {
   }
 
   const auto percentCursor = centerText(numLen + 1, LCD_META.rows);
+  const auto centered = centerText(BOOT_TXT.length(), LCD_META.rows);
+
+  LCD.clear();
+
+  if (isVisible) {
+    LCD.setCursor(centered, 0);
+    LCD.print(BOOT_TXT);
+  }
 
   LCD.setCursor(percentCursor, 1);
   LCD.print(loading_value);

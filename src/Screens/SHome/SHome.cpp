@@ -20,6 +20,7 @@ void SHome::display(LiquidCrystal_I2C lcd) {
   const auto ta = centerText(14, LCD_META.rows);
   const auto tb = centerText(14, LCD_META.rows);
 
+  lcd.clear();
   lcd.setCursor(ta, 0);
   lcd.print("Temp: ");
   lcd.print(temperature);

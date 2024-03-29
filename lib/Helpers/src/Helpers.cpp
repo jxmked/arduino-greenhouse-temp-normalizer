@@ -21,3 +21,8 @@ bool isDiffAchieved(unsigned long currentMs, unsigned long lastMs, unsigned long
 unsigned long getMillisDiff(unsigned long currentMs, unsigned long lastMs) {
   return currentMs - lastMs;
 }
+
+double transitionSwing(double t) {
+  return 0.5 - cos(M_PI * t) / 2.0;
+}
+

@@ -24,6 +24,7 @@ void SInitial::display(LiquidCrystal_I2C LCD) {
   const auto txt_a_pos = centerText(TXT_A.length(), LCD_META.rows);
   const auto txt_b_pos = centerText(TXT_B.length(), LCD_META.rows);
 
+  LCD.clear();
   LCD.setCursor(txt_a_pos, 0);
   LCD.print(TXT_A);
 

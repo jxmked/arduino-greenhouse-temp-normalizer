@@ -15,6 +15,7 @@ public:
   void update();
   void display();
   E_PROGRAM_STATE getState();
+  void configMode();
 
 private:
   E_PROGRAM_STATE state;

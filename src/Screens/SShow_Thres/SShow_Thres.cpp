@@ -24,6 +24,8 @@ void SShow_Thres::display(LiquidCrystal_I2C lcd) {
   const auto num_cursor = centerText(3, LCD_META.rows);
   const auto cursor = centerText(txt.length(), LCD_META.rows);
 
+  lcd.clear();
+
   lcd.setCursor(cursor, 0);
   lcd.print(txt);
 

@@ -9,19 +9,27 @@
 #include "PIN_DATA.h"
 #include "RelayController.h"
 #include "TemperatureController.h"
+#include "CONFIG_T.h"
+#include "E_SCREEN_META.h"
 
 // Will include all screen files
 #include "Screens/index.cpp"
 
+/** OUR DATA & CONFIG **/
+
+CONFIG_T CONFIG;
+
 int THRESHOLD = 31;
 
+
+/** END DATA & CONFIG **/
+/**
+ * Screen Object
+*/
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
+TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
 
-// Screen Text Definition.
-// We need to define it as constant String type
-// So we can get the length method
-
-TimeInterval lcd_hz(200, 0, true);
+/*** END SCREEN ***/
 
 /**
  * DHT Sensor
@@ -36,9 +44,6 @@ TimeInterval mainSensorHz = TimeInterval(2000, 0, true);
 */
 RelayController recon = RelayController(PIN_DATA.Fan_Relay);
 TemperatureController tempCont = TemperatureController();
-
-
-
 /** END RELAY CONTROLLER AND LOGIC */
 
 /**
@@ -72,6 +77,16 @@ Program::Program() : state(E_PROGRAM_STATE::BOOT),
 currentInterval(0) { }
 
 void Program::begin() {
+  /** Lets populate config with initial data **/
+  CONFIG.THRESHOLD = 32;
+  CONFIG.isSystmActive = true;
+  CONFIG.SCREEN_META = E_SCREEN_META::AUTO;
+
+  /** END POPULATE DATA **/
+
+
+
+
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
 
@@ -204,9 +219,6 @@ void Program::update() {
 void Program::display() {
   if (!lcd_hz.marked())
     return;
-
-  lcd.clear();
-
   for (int index = 0; index < screenLength; index++) {
     BaseScreen& scr = *screens[index];
 

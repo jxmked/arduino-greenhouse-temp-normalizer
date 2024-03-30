@@ -7,20 +7,31 @@
 class BrightnessAuto {
 public:
   BrightnessAuto();
+  /**
+   * Outside values
+  */
   float temp;
   float humd;
   int threshold;
-  int brightness; // 0 - 100
+  int targetBright;
   E_SCREEN_META meta;
+
+  // We can get brightness here directly
+  int brightness; // 0 - 100
   int nearBright; // ±1 degree celsius to trigger
+
+  void begin(unsigned long ms);
+
   void update(unsigned long ms);
 
-  const int TRANSITION_INTERVAL = 1500; // 1.5 sec
+  const int DURATION = 2000; // 1.5 sec
+  const int VALUE_SCALE = 1000;
 
   private:
-    unsigned long lastIntervalA;
-    bool onAnimate;
-    bool onIncrease;
+    unsigned long lastms;
+    float _lastValue;
+    bool isNearThreshold(float temp);
+    void transistionBrightness(unsigned long ms);
 
 
 };

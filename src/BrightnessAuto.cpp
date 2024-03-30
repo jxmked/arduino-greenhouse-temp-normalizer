@@ -7,33 +7,56 @@ BrightnessAuto::BrightnessAuto() :
   temp(0),
   humd(0),
   threshold(0),
-  brightness(0),
+  targetBright(100),
   meta(E_SCREEN_META::AUTO),
+  brightness(0),
   nearBright(1),
-  lastIntervalA(0),
-  onAnimate(false),
-  onIncrease(false) {
+  lastms(0),
+  _lastValue(targetBright) {
 
+}
+
+void BrightnessAuto::begin(unsigned long ms) {
+  lastms = ms;
 }
 
 void BrightnessAuto::update(unsigned long ms) {
-  if (!onAnimate)
-    lastIntervalA = ms;
 
-
-  if (temp + nearBright >= threshold) {
-    onAnimate = true;
-
-    auto a = static_cast<double>(ms - lastIntervalA);
-    const auto b = static_cast<double>(TRANSITION_INTERVAL);
-
-    if (a >= b) {
-      a = b;
-    }
-
-    brightness = round(100 * transitionSwing(a / b));
-  } else {
-    onAnimate = false;
-
+  if (brightness != targetBright) {
+    transistionBrightness(ms);
+    brightness = round(_lastValue);
   }
 }
+
+bool BrightnessAuto::isNearThreshold(float temp) {
+  return false;
+}
+
+void BrightnessAuto::transistionBrightness(unsigned long ms) {
+  const long ellapse = ms - lastms;
+
+  if (ellapse >= DURATION) {
+    _lastValue = float(targetBright);
+  } else {
+    const float delta = float(targetBright) - _lastValue;
+    _lastValue = _lastValue + (delta * float(ellapse) / float(DURATION));
+
+    if (targetBright == 0) {
+      if (abs(_lastValue) < 2) {
+        _lastValue = 0.0;
+      }
+    } else {
+      if (abs(_lastValue) > 98) {
+        _lastValue = 100.0;
+      }
+    }
+
+    if (abs(_lastValue) == targetBright) {
+      lastms = ms - 100;
+    }
+  }
+}
+
+
+
+

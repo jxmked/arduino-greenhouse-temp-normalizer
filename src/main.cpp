@@ -4,10 +4,7 @@
 #include "Helpers.h"
 #include "PIN_DATA.h"
 
-#define P_SENSOR A0
-#define P_INC_BTN 2
-#define P_ETR_BTN 3
-#define P_DEC_BTN 4
+#include <Wire.h>
 
 Button plus(PIN_DATA.PLUS_BTN);
 Button minus(PIN_DATA.MINUS_BTN);
@@ -18,6 +15,13 @@ Program app;
 unsigned long enterIval = 0;
 
 void setup() {
+
+  Serial.begin(9600);
+while (!Serial)
+{
+  /* code */
+}
+
 
   app.begin();
 

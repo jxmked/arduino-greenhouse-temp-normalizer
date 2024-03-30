@@ -11,6 +11,7 @@
 #include "TemperatureController.h"
 #include "CONFIG_T.h"
 #include "E_SCREEN_META.h"
+#include "BrightnessAuto.h"
 
 // Will include all screen files
 #include "Screens/index.cpp"
@@ -28,6 +29,7 @@ int THRESHOLD = 31;
 */
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
+BrightnessAuto brightAuto;
 
 /*** END SCREEN ***/
 
@@ -77,6 +79,8 @@ Program::Program() : state(E_PROGRAM_STATE::BOOT),
 currentInterval(0) { }
 
 void Program::begin() {
+  const auto initialMillis = millis();
+
   /** Lets populate config with initial data **/
   CONFIG.THRESHOLD = 32;
   CONFIG.isSystmActive = true;
@@ -89,13 +93,13 @@ void Program::begin() {
 
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
+  brightAuto.begin(initialMillis);
 
   __showthres__->threshold = THRESHOLD;
 
   recon.begin();
   tempCont.begin();
 
-  const auto initialMillis = millis();
 
   for (int index = 0; index < screenLength; index++) {
     BaseScreen& scr = *screens[index];
@@ -120,12 +124,16 @@ void Program::pressDecrease() {
 
   show_threshold(millis());
 
+  brightAuto.targetBright = 0;
+
   THRESHOLD--;
 }
 
 void Program::pressIncrease() {
   if (!isReady) return;
   show_threshold(millis());
+
+  brightAuto.targetBright = 100;
 
   THRESHOLD++;
 }
@@ -144,11 +152,19 @@ void Program::update() {
   __shome__->updateReadings(mainSensor.temperature(), mainSensor.humidity());
   __showthres__->threshold = THRESHOLD;
 
+  brightAuto.temp = mainSensor.temperature();
+  brightAuto.humd = mainSensor.humidity();
+  brightAuto.threshold = THRESHOLD;
+
   /** End Populate screens with datas */
 
   tempCont.setThreshold(THRESHOLD);
   tempCont.setTempHumd(mainSensor.temperature(), mainSensor.humidity());
   tempCont.update(ms);
+
+  brightAuto.update(ms);
+
+  analogWrite(PIN_DATA.LCD_BLIGHT, map(brightAuto.brightness, 0, 100, 10, 156));
 
   if (isReady && tempCont.isThresholdExceed()) {
     recon.activate();

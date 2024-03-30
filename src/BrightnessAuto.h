@@ -24,7 +24,7 @@ public:
 
   void update(unsigned long ms);
 
-  const int DURATION = 2000; // 1.5 sec
+  const int DURATION = 4000; // ms
   const int VALUE_SCALE = 1000;
 
   private:
@@ -32,8 +32,6 @@ public:
     float _lastValue;
     bool isNearThreshold(float temp);
     void transistionBrightness(unsigned long ms);
-
-
 };
 
 #endif

@@ -7,6 +7,8 @@ public:
   void update();
   bool marked(unsigned long holdMillis = 0);
   void reset();
+  void pause();
+  void resume();
 
 private:
   unsigned long interval;
@@ -14,6 +16,7 @@ private:
   unsigned long lastTime;
   unsigned long time;
   unsigned long offset;
+  bool paused;
 };
 
 #endif

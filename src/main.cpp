@@ -4,8 +4,6 @@
 #include "Helpers.h"
 #include "PIN_DATA.h"
 
-#include <Wire.h>
-
 Button plus(PIN_DATA.PLUS_BTN);
 Button minus(PIN_DATA.MINUS_BTN);
 Button enter(PIN_DATA.ENTER_BTN);
@@ -15,14 +13,6 @@ Program app;
 unsigned long enterIval = 0;
 
 void setup() {
-
-  Serial.begin(9600);
-while (!Serial)
-{
-  /* code */
-}
-
-
   app.begin();
 
   plus.begin();

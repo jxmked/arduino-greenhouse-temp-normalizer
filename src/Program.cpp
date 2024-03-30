@@ -28,9 +28,10 @@ int THRESHOLD = 31;
  * Screen Object
 */
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
-TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
 BrightnessAuto brightAuto;
-
+TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
+TimeInterval brightnessAutoTrans(15000, 0, true); // 30 sec
+unsigned long lastBtnEvent = 0;
 /*** END SCREEN ***/
 
 /**
@@ -94,6 +95,7 @@ void Program::begin() {
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
   brightAuto.begin(initialMillis);
+  brightAuto.targetBright = 50;
 
   __showthres__->threshold = THRESHOLD;
 
@@ -115,6 +117,9 @@ void Program::show_threshold(unsigned long ms) {
 
 void Program::pressEnter() {
   if (!isReady) return;
+  brightAuto.targetBright = 100;
+  lastBtnEvent = millis();
+  brightnessAutoTrans.pause();
 
   show_threshold(millis());
 }
@@ -122,19 +127,23 @@ void Program::pressEnter() {
 void Program::pressDecrease() {
   if (!isReady) return;
 
+  brightAuto.targetBright = 100;
+  lastBtnEvent = millis();
+  brightnessAutoTrans.pause();
+
   show_threshold(millis());
-
-  brightAuto.targetBright = 0;
-
   THRESHOLD--;
 }
 
 void Program::pressIncrease() {
   if (!isReady) return;
-  show_threshold(millis());
+
 
   brightAuto.targetBright = 100;
+  lastBtnEvent = millis();
+  brightnessAutoTrans.pause();
 
+  show_threshold(millis());
   THRESHOLD++;
 }
 
@@ -161,6 +170,16 @@ void Program::update() {
   tempCont.setThreshold(THRESHOLD);
   tempCont.setTempHumd(mainSensor.temperature(), mainSensor.humidity());
   tempCont.update(ms);
+
+  if(lastBtnEvent - ms >= 10000) {
+    brightnessAutoTrans.resume();
+  }
+
+  if(isReady && brightnessAutoTrans.marked(45000)) {
+    brightAuto.targetBright = 0;
+  } else {
+    brightAuto.targetBright = 100;
+  }
 
   brightAuto.update(ms);
 

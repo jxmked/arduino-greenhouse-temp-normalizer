@@ -7,13 +7,17 @@ TimeInterval::TimeInterval(unsigned long interval, unsigned long offset, bool au
   autoUpdate(autoUpdate),
   lastTime(0),
   time(0),
-  offset(offset) {
+  offset(offset),
+  paused(false) {
   update();
   lastTime = time;
 }
 
 void TimeInterval::update() {
   time = millis() + offset;
+
+  if (paused)
+    lastTime = time;
 }
 
 bool TimeInterval::marked(unsigned long holdMillis) {
@@ -33,4 +37,12 @@ bool TimeInterval::marked(unsigned long holdMillis) {
 
 void TimeInterval::reset() {
   lastTime = time;
+}
+
+void TimeInterval::pause() {
+  paused = true;
+}
+
+void TimeInterval::resume() {
+  paused = false;
 }

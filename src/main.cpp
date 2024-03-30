@@ -27,8 +27,8 @@ void setup() {
 
 void loop() {
 
-  if(enter.read() == Button::PRESSED) {
-    if(isDiffAchieved(millis(), enterIval, 5000)) {
+  if (enter.read() == Button::PRESSED) {
+    if (isDiffAchieved(millis(), enterIval, 5000)) {
       app.configMode();
     }
   } else {
@@ -39,11 +39,11 @@ void loop() {
     app.pressEnter();
   }
 
-  if(minus.pressed()) {
+  if (minus.pressed()) {
     app.pressDecrease();
   }
 
-  if(plus.pressed()) {
+  if (plus.pressed()) {
     app.pressIncrease();
   }
 

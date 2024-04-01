@@ -7,7 +7,7 @@
 #include "Helpers.h"
 #include <String.h>
 
-#define __THRES_TEXT "THRESHOLD"
+#define __THRES_TEXT "Critical Temp"
 
 SShow_Thres::SShow_Thres() : BaseScreen(E_PROGRAM_STATE::SHOW_THRESHOLD, 3000),
 threshold(0),

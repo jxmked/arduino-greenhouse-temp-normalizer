@@ -131,8 +131,11 @@ void Program::pressDecrease() {
   lastBtnEvent = millis();
   brightnessAutoTrans.pause();
 
-  show_threshold(millis());
-  THRESHOLD--;
+  // show_threshold(millis());
+  if (state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
+    _lastTime = millis();
+    THRESHOLD--;
+  }
 }
 
 void Program::pressIncrease() {
@@ -143,8 +146,11 @@ void Program::pressIncrease() {
   lastBtnEvent = millis();
   brightnessAutoTrans.pause();
 
-  show_threshold(millis());
-  THRESHOLD++;
+  //show_threshold(millis());
+  if (state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
+    _lastTime = millis();
+    THRESHOLD++;
+  }
 }
 
 
@@ -171,11 +177,11 @@ void Program::update() {
   tempCont.setTempHumd(mainSensor.temperature(), mainSensor.humidity());
   tempCont.update(ms);
 
-  if(lastBtnEvent - ms >= 10000) {
+  if (lastBtnEvent - ms >= 10000) {
     brightnessAutoTrans.resume();
   }
 
-  if(isReady && brightnessAutoTrans.marked(45000)) {
+  if (isReady && brightnessAutoTrans.marked(45000)) {
     brightAuto.targetBright = 0;
   } else {
     brightAuto.targetBright = 100;

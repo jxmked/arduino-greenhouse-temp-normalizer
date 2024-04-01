@@ -24,8 +24,7 @@ public:
 
   void update(unsigned long ms);
 
-  const int DURATION = 4000; // ms
-  const int VALUE_SCALE = 1000;
+  const float DURATION = 4000.0; // ms
 
   private:
     unsigned long lastms;

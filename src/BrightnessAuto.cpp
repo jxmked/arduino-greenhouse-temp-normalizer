@@ -22,13 +22,15 @@ void BrightnessAuto::begin(unsigned long ms) {
 
 void BrightnessAuto::update(unsigned long ms) {
 
+  if (isNearThreshold(temp)) {
+    brightness = 100;
+    return;
+  }
+
   if (brightness != targetBright) {
     transistionBrightness(ms);
     brightness = min(100, max(0, round(_lastValue)));
-
-    Serial.println(_lastValue);
   }
-
 
   // Keep updated
   if (round(_lastValue) == round(targetBright)) {
@@ -37,7 +39,9 @@ void BrightnessAuto::update(unsigned long ms) {
 }
 
 bool BrightnessAuto::isNearThreshold(float temp) {
+  if (temp >= threshold) return true;
   return false;
+  //return (threshold <= temp + nearBright);
 }
 
 void BrightnessAuto::transistionBrightness(unsigned long ms) {
@@ -47,9 +51,8 @@ void BrightnessAuto::transistionBrightness(unsigned long ms) {
     _lastValue = float(targetBright);
   } else {
     const float delta = float(targetBright) - _lastValue;
-    const float  res = (delta * float(ellapse) / float(DURATION));
 
-    _lastValue = _lastValue + res;
+    _lastValue = _lastValue + float(delta * (float(ellapse) / DURATION));
 
     if (targetBright == 0) {
       if (abs(_lastValue) < 2) {

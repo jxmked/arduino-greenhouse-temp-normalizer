@@ -11,8 +11,8 @@ current_temp(0) { }
 
 void DHTSensor::update() {
   dht_sensor.read(pin);
-  current_hum = (float)dht_sensor.humidity;
-  current_temp = (float)dht_sensor.temperature;
+  current_hum = static_cast<float>(dht_sensor.humidity);
+  current_temp = static_cast<float>(dht_sensor.temperature);
 }
 
 float DHTSensor::temperature() {

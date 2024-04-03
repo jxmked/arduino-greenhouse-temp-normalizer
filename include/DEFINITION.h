@@ -33,3 +33,8 @@
  * to "BaseScreen(E_PROGRAM_STATE::SHOW_THRESHOLD, %Any interval you want%)"
 */
 #define SWITCHING_INTERVAL 38000 // 38 seconds
+
+/**
+ * Use Other Boot Animation
+*/
+#define USE_BLOCK_BOOT 1

@@ -32,6 +32,16 @@ volatile int THRESHOLD = 31;
 /**
  * Screen Object
 */
+byte __SCREEN_BLOCK__[8] = {
+B111111,
+B111111,
+B111111,
+B111111,
+B111111,
+B111111,
+B111111,
+B111111
+};
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 BrightnessAuto brightAuto;
 TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
@@ -68,6 +78,8 @@ BaseScreen* screens[] = {
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
 
+bool justStarted = false; // 
+
 /** END SCREENS */
 
 unsigned long _lastTime = 0;
@@ -100,6 +112,8 @@ void Program::begin() {
   CONFIG.SCREEN_META = E_SCREEN_META::AUTO;
 
   /** END POPULATE DATA **/
+
+  lcd.createChar(0, __SCREEN_BLOCK__);
 
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
@@ -174,6 +188,10 @@ void Program::pressIncrease() {
 
 void Program::update() {
   const auto ms = millis();
+  if(!justStarted) {
+    screens[1]->begin(ms);
+    justStarted = true;
+  }
 
   // Always Update Our Sensor Even in the Background
   if (mainSensorHz.marked())

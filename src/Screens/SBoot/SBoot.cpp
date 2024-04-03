@@ -1,5 +1,6 @@
-#include "SBoot.h"
 #include <Arduino.h>
+#include "DEFINITION.h"
+#include "SBoot.h"
 #include <E_PROGRAM_STATE.h>
 #include <LiquidCrystal_I2C.h>
 #include "../BaseScreen.h"
@@ -7,7 +8,12 @@
 #include "Helpers.h"
 #include "LCD_META.h"
 
+#if USE_BLOCK_BOOT
+#define __BOOT_TEXT "LOADING: "
+#else
 #define __BOOT_TEXT "LOADING"
+#endif
+
 #define __BOOT_INTERVAL 3000      // Display for 3 sec
 #define __BOOT_BLINK_INTERVAL 800 // 800 ms
 
@@ -30,6 +36,30 @@ void SBoot::update(unsigned long ms) {
 
 void SBoot::display(LiquidCrystal_I2C LCD) {
 
+#if USE_BLOCK_BOOT
+  // For Second Row
+  const int blockCount = 16 * (float(loading_value) / 100);
+
+  LCD.clear();
+
+  // Row 1
+  if (isVisible) {
+    LCD.setCursor(1, 0);
+    LCD.print(BOOT_TXT);
+  }
+
+  LCD.setCursor(10, 0);
+  LCD.print(loading_value);
+  LCD.print("%");
+  // End Row 1
+
+  // Row 2
+  LCD.setCursor(0, 1);
+  for (int i = 0; i < blockCount; i++) {
+    LCD.write(byte(0));
+  }
+  // End Row 2
+#else
   // Length of a number.
   // I have tried to convert number to string
   // but fail multiple times. I can't find any
@@ -55,4 +85,5 @@ void SBoot::display(LiquidCrystal_I2C LCD) {
   LCD.setCursor(percentCursor, 1);
   LCD.print(loading_value);
   LCD.print("%");
+#endif
 }

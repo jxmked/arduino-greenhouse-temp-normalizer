@@ -26,6 +26,8 @@ void setup() {
   app.begin();
 
   lastStateClick = digitalRead(PIN_DATA.MINUS_BTN);
+
+  delay(10); // Just making other parts to be ready
 }
 
 void loop() {

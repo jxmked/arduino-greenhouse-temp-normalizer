@@ -163,6 +163,7 @@ void Program::pressDecrease() {
   if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
     _lastTime = millis();
     THRESHOLD--;
+    THRESHOLD = max(18, min(45, THRESHOLD)); // limit
   }
 }
 
@@ -180,6 +181,7 @@ void Program::pressIncrease() {
   if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
     _lastTime = millis();
     THRESHOLD++;
+    THRESHOLD = max(18, min(45, THRESHOLD)); // limit
   }
 }
 

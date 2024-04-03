@@ -21,8 +21,9 @@ void setup() {
 
   pinMode(PIN_DATA.PLUS_BTN, INPUT_PULLUP);
   pinMode(PIN_DATA.MINUS_BTN, INPUT_PULLUP);
-  analogWrite(PIN_DATA.LCD_BLIGHT, 1024);
 
+  analogWrite(PIN_DATA.LCD_BLIGHT, 1024);
+  digitalWrite(PIN_DATA.Fan_Relay, HIGH);
   app.begin();
 
   lastStateClick = digitalRead(PIN_DATA.MINUS_BTN);

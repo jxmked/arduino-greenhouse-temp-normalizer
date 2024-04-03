@@ -1,8 +1,10 @@
 #include <Arduino.h>
+#include "DEFINITION.h"
 #include "Program.h"
 #include "Button.h"
 #include "Helpers.h"
 #include "PIN_DATA.h"
+
 
 const uint8_t PLUS = PIN_DATA.PLUS_BTN;
 const uint8_t MINUS = PIN_DATA.MINUS_BTN;
@@ -19,6 +21,7 @@ void setup() {
 
   pinMode(PIN_DATA.PLUS_BTN, INPUT_PULLUP);
   pinMode(PIN_DATA.MINUS_BTN, INPUT_PULLUP);
+  analogWrite(PIN_DATA.LCD_BLIGHT, 1024);
 
   app.begin();
 

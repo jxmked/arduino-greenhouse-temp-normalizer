@@ -1,3 +1,4 @@
+#include "DEFINITION.h"
 #include "Program.h"
 #include <Arduino.h>
 #include <E_PROGRAM_STATE.h>
@@ -13,6 +14,10 @@
 #include "E_SCREEN_META.h"
 #include "BrightnessAuto.h"
 
+#ifndef AUTOBRIGHT_RESUME_AT
+#define AUTOBRIGHT_RESUME_AT 10000 // 10 sec
+#endif
+
 // Will include all screen files
 #include "Screens/index.cpp"
 
@@ -20,7 +25,7 @@
 
 CONFIG_T CONFIG;
 
-int THRESHOLD = 31;
+volatile int THRESHOLD = 31;
 
 
 /** END DATA & CONFIG **/
@@ -76,6 +81,13 @@ E_PROGRAM_STATE currentFirst = E_PROGRAM_STATE::BOOT;
 // Deny all button actions during boot...
 bool isReady = false;
 
+// Check if the Show Threshold is set by
+// the system of a button
+bool isSystemActivated = false;
+
+// pause trasition between home and threshold
+bool isTransitionPaused = false;
+
 Program::Program() : state(E_PROGRAM_STATE::BOOT),
 currentInterval(0) { }
 
@@ -88,9 +100,6 @@ void Program::begin() {
   CONFIG.SCREEN_META = E_SCREEN_META::AUTO;
 
   /** END POPULATE DATA **/
-
-
-
 
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.backlight();
@@ -117,6 +126,9 @@ void Program::show_threshold(unsigned long ms) {
 
 void Program::pressEnter() {
   if (!isReady) return;
+  isSystemActivated = false;
+  isTransitionPaused = true;
+
   brightAuto.targetBright = 100;
   lastBtnEvent = millis();
   brightnessAutoTrans.pause();
@@ -131,8 +143,10 @@ void Program::pressDecrease() {
   lastBtnEvent = millis();
   brightnessAutoTrans.pause();
 
-  // show_threshold(millis());
-  if (state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
+#if ROTATE_ENCODER_ADJUST_THRESHOLD
+  show_threshold(millis());
+#endif
+  if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
     _lastTime = millis();
     THRESHOLD--;
   }
@@ -141,13 +155,15 @@ void Program::pressDecrease() {
 void Program::pressIncrease() {
   if (!isReady) return;
 
-
   brightAuto.targetBright = 100;
   lastBtnEvent = millis();
   brightnessAutoTrans.pause();
 
-  //show_threshold(millis());
-  if (state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
+#if ROTATE_ENCODER_ADJUST_THRESHOLD
+  show_threshold(millis());
+#endif
+
+  if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
     _lastTime = millis();
     THRESHOLD++;
   }
@@ -168,7 +184,6 @@ void Program::update() {
   __showthres__->threshold = THRESHOLD;
 
   brightAuto.temp = mainSensor.temperature();
-  brightAuto.humd = mainSensor.humidity();
   brightAuto.threshold = THRESHOLD;
 
   /** End Populate screens with datas */
@@ -177,8 +192,9 @@ void Program::update() {
   tempCont.setTempHumd(mainSensor.temperature(), mainSensor.humidity());
   tempCont.update(ms);
 
-  if (lastBtnEvent - ms >= 10000) {
+  if (lastBtnEvent - ms >= AUTOBRIGHT_RESUME_AT) {
     brightnessAutoTrans.resume();
+    isTransitionPaused = false;
   }
 
   if (isReady && brightnessAutoTrans.marked(45000)) {
@@ -234,7 +250,13 @@ void Program::update() {
 
   case E_PROGRAM_STATE::HOME:
     isReady = true;
-
+    isSystemActivated = false;
+#if SWITCH_HOME_THRESHOLD
+    if (!isTransitionPaused && isDiffAchieved(millis(), _lastTime, SWITCHING_INTERVAL)) {
+      state = E_PROGRAM_STATE::SHOW_THRESHOLD;
+      isSystemActivated = true;
+    }
+#endif
     break;
 
   case E_PROGRAM_STATE::SHOW_THRESHOLD:

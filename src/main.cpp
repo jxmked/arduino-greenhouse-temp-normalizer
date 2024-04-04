@@ -5,7 +5,6 @@
 #include "Helpers.h"
 #include "PIN_DATA.h"
 
-
 const uint8_t PLUS = PIN_DATA.PLUS_BTN;
 const uint8_t MINUS = PIN_DATA.MINUS_BTN;
 

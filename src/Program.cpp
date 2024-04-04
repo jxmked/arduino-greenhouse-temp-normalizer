@@ -113,10 +113,11 @@ void Program::begin() {
 
   /** END POPULATE DATA **/
 
-  lcd.createChar(0, __SCREEN_BLOCK__);
-
   lcd.begin(LCD_META.rows, LCD_META.cols);
+  lcd.createChar(0, __SCREEN_BLOCK__);
   lcd.backlight();
+  
+  // Auto brightness init/setup
   brightAuto.begin(initialMillis);
   brightAuto.targetBright = 50;
 
@@ -124,7 +125,6 @@ void Program::begin() {
 
   recon.begin();
   tempCont.begin();
-
 
   for (int index = 0; index < screenLength; index++) {
     BaseScreen& scr = *screens[index];

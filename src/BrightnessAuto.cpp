@@ -32,13 +32,11 @@ void BrightnessAuto::update(unsigned long ms) {
    * */
   if (isNearThreshold(temp)) {
     brightness = 100;
-    return;
-  }
-
-  
-  if (brightness != targetBright) {
-    transitionBrightness(ms);
-    brightness = min(100, max(0, rounded_value));
+  } else {
+    if (brightness != targetBright) {
+      transitionBrightness(ms);
+      brightness = min(100, max(0, rounded_value));
+    }
   }
 
   // Keep updated
@@ -62,11 +60,11 @@ void BrightnessAuto::transitionBrightness(unsigned long ms) {
   const long elapse = ms - lastms;
   const float maxDelta = float(elapse) / DURATION;
   const float delta = float(targetBright) - _lastValue;
+  
+  _lastValue += delta;
 
   if (abs(delta) > maxDelta) {
     _lastValue += (delta > 0) ? maxDelta : -maxDelta;
-  } else {
-    _lastValue += delta;
   }
 
   if (targetBright == 0) {
@@ -79,7 +77,3 @@ void BrightnessAuto::transitionBrightness(unsigned long ms) {
     }
   }
 }
-
-
-
-

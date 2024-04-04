@@ -291,7 +291,7 @@ void Program::update() {
   }
 
   recon.update(ms);
-}\
+}
 
 
 /************** END UPDATE ***************/

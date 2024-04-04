@@ -23,11 +23,11 @@ void BrightnessAuto::begin(unsigned long ms) {
 }
 
 void BrightnessAuto::update(unsigned long ms) {
-  
+
   const int rounded_value = round(_lastValue);
 
   /**
-   * Lock the brightness when the temperature is 
+   * Lock the brightness when the temperature is
    * near, equal or greater than threshold.
    * */
   if (isNearThreshold(temp)) {
@@ -60,11 +60,11 @@ void BrightnessAuto::transitionBrightness(unsigned long ms) {
   const long elapse = ms - lastms;
   const float maxDelta = float(elapse) / DURATION;
   const float delta = float(targetBright) - _lastValue;
-  
-  _lastValue += delta;
 
   if (abs(delta) > maxDelta) {
     _lastValue += (delta > 0) ? maxDelta : -maxDelta;
+  } else {
+    _lastValue += delta;
   }
 
   if (targetBright == 0) {

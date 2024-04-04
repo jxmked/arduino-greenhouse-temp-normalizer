@@ -14,17 +14,15 @@
 #include "E_SCREEN_META.h"
 #include "BrightnessAuto.h"
 
-#ifndef AUTOBRIGHT_RESUME_AT
-#define AUTOBRIGHT_RESUME_AT 10000 // 10 sec
-#endif
-
 // Will include all screen files
 #include "Screens/index.cpp"
 
 /** OUR DATA & CONFIG **/
 
-CONFIG_T CONFIG;
+// CONFIG_T CONFIG;
 
+#define minThreshold 18
+#define maxThreshold 45
 volatile int THRESHOLD = 31;
 
 
@@ -107,16 +105,16 @@ void Program::begin() {
   const auto initialMillis = millis();
 
   /** Lets populate config with initial data **/
-  CONFIG.THRESHOLD = 32;
-  CONFIG.isSystmActive = true;
-  CONFIG.SCREEN_META = E_SCREEN_META::AUTO;
+  // CONFIG.THRESHOLD = 32;
+  // CONFIG.isSystmActive = true;
+  // CONFIG.SCREEN_META = E_SCREEN_META::AUTO;
 
   /** END POPULATE DATA **/
 
   lcd.begin(LCD_META.rows, LCD_META.cols);
   lcd.createChar(0, __SCREEN_BLOCK__);
   lcd.backlight();
-  
+
   // Auto brightness init/setup
   brightAuto.begin(initialMillis);
   brightAuto.targetBright = 50;
@@ -153,24 +151,25 @@ void Program::pressEnter() {
 void Program::pressDecrease() {
   if (!isReady) return;
 
-  brightAuto.targetBright = 100;
+  // brightAuto.targetBright = 100;
   lastBtnEvent = millis();
   brightnessAutoTrans.pause();
 
 #if ROTATE_ENCODER_ADJUST_THRESHOLD
   show_threshold(millis());
 #endif
+
   if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
     _lastTime = millis();
     THRESHOLD--;
-    THRESHOLD = max(18, min(45, THRESHOLD)); // limit
+    THRESHOLD = max(minThreshold, min(maxThreshold, THRESHOLD)); // limit
   }
 }
 
 void Program::pressIncrease() {
   if (!isReady) return;
 
-  brightAuto.targetBright = 100;
+  // brightAuto.targetBright = 100;
   lastBtnEvent = millis();
   brightnessAutoTrans.pause();
 
@@ -181,7 +180,7 @@ void Program::pressIncrease() {
   if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
     _lastTime = millis();
     THRESHOLD++;
-    THRESHOLD = max(18, min(45, THRESHOLD)); // limit
+    THRESHOLD = max(minThreshold, min(maxThreshold, THRESHOLD)); // limit
   }
 }
 
@@ -190,7 +189,7 @@ void Program::pressIncrease() {
 
 void Program::update() {
   const auto ms = millis();
-  if(!justStarted) {
+  if (!justStarted) {
     screens[1]->begin(ms);
     justStarted = true;
   }
@@ -212,12 +211,14 @@ void Program::update() {
   tempCont.setTempHumd(mainSensor.temperature(), mainSensor.humidity());
   tempCont.update(ms);
 
-  if (lastBtnEvent - ms >= AUTOBRIGHT_RESUME_AT) {
+  const bool btnIvalEvtEnded = abs(ms - lastBtnEvent) >= AUTOBRIGHT_RESUME_AT;
+
+  if (btnIvalEvtEnded) {
     brightnessAutoTrans.resume();
     isTransitionPaused = false;
   }
 
-  if (isReady && brightnessAutoTrans.marked(45000)) {
+  if (isReady && btnIvalEvtEnded && brightnessAutoTrans.marked(45000)) {
     brightAuto.targetBright = 0;
   } else {
     brightAuto.targetBright = 100;

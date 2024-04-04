@@ -17,7 +17,7 @@
  * When buttons has been triggered, automatically resume
  * auto brightness after 
 */
-#define AUTOBRIGHT_RESUME_AT 7000 // 7 sec
+#define AUTOBRIGHT_RESUME_AT 5000 // ms
 
 /**
  * Switch Alternately the Home Screen and Threshold 

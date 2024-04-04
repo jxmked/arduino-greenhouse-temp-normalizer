@@ -23,19 +23,26 @@ void BrightnessAuto::begin(unsigned long ms) {
 }
 
 void BrightnessAuto::update(unsigned long ms) {
+  
+  const int rounded_value = round(_lastValue);
 
+  /**
+   * Lock the brightness when the temperature is 
+   * near, equal or greater than threshold.
+   * */
   if (isNearThreshold(temp)) {
     brightness = 100;
     return;
   }
 
+  
   if (brightness != targetBright) {
-    transistionBrightness(ms);
-    brightness = min(100, max(0, round(_lastValue)));
+    transitionBrightness(ms);
+    brightness = min(100, max(0, rounded_value));
   }
 
   // Keep updated
-  if (round(_lastValue) == round(targetBright)) {
+  if (rounded_value == round(targetBright)) {
     lastms = ms - 10;
   }
 }
@@ -48,18 +55,19 @@ bool BrightnessAuto::isNearThreshold(float temp) {
 #endif
 }
 
-void BrightnessAuto::transistionBrightness(unsigned long ms) {
+/**
+ * Create smooth brightness transistion
+ * */
+void BrightnessAuto::transitionBrightness(unsigned long ms) {
   const long elapse = ms - lastms;
   const float maxDelta = float(elapse) / DURATION;
   const float delta = float(targetBright) - _lastValue;
 
-  float clampedDelta = delta;
-
   if (abs(delta) > maxDelta) {
-    clampedDelta = (delta > 0) ? maxDelta : -maxDelta;
+    _lastValue += (delta > 0) ? maxDelta : -maxDelta;
+  } else {
+    _lastValue += delta;
   }
-
-  _lastValue += clampedDelta;
 
   if (targetBright == 0) {
     if (abs(_lastValue) < 2) {
@@ -69,7 +77,6 @@ void BrightnessAuto::transistionBrightness(unsigned long ms) {
     if (abs(_lastValue) > 98) {
       _lastValue = 100.0;
     }
-
   }
 }
 

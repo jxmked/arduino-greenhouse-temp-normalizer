@@ -34,7 +34,7 @@ private:
   unsigned long lastms;
   float _lastValue;
   bool isNearThreshold(float temp);
-  void transistionBrightness(unsigned long ms);
+  void transitionBrightness(unsigned long ms);
 };
 
 #endif

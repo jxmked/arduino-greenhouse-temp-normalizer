@@ -54,7 +54,7 @@ bool BrightnessAuto::isNearThreshold(float temp) {
 }
 
 /**
- * Create smooth brightness transistion
+ * Create smooth brightness transition
  * */
 void BrightnessAuto::transitionBrightness(unsigned long ms) {
   const long elapse = ms - lastms;

@@ -250,20 +250,20 @@ void Program::update() {
 
   if (_timeOwner != _lastTimeOwner) {
     _lastTimeOwner = _timeOwner;
-    _lastTime = millis();
+    _lastTime = ms;
   }
   /////////////////////////////
 
   switch (state) {
   case E_PROGRAM_STATE::BOOT:
-    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval)) {
+    if (isDiffAchieved(ms, _lastTime, screens[1]->screenInterval)) {
       state = E_PROGRAM_STATE::INITIAL;
     }
 
     break;
 
   case E_PROGRAM_STATE::INITIAL:
-    if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval)) {
+    if (isDiffAchieved(ms, _lastTime, screens[2]->screenInterval)) {
       state = E_PROGRAM_STATE::SHOW_THRESHOLD;
     }
 
@@ -273,7 +273,7 @@ void Program::update() {
     isReady = true;
     isSystemActivated = false;
 #if SWITCH_HOME_THRESHOLD
-    if (!isTransitionPaused && isDiffAchieved(millis(), _lastTime, SWITCHING_INTERVAL)) {
+    if (!isTransitionPaused && isDiffAchieved(ms, _lastTime, SWITCHING_INTERVAL)) {
       state = E_PROGRAM_STATE::SHOW_THRESHOLD;
       isSystemActivated = true;
     }
@@ -281,7 +281,7 @@ void Program::update() {
     break;
 
   case E_PROGRAM_STATE::SHOW_THRESHOLD:
-    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval)) {
+    if (isDiffAchieved(ms, _lastTime, screens[0]->screenInterval)) {
       state = E_PROGRAM_STATE::HOME;
     }
 

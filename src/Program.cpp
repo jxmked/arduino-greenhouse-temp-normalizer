@@ -43,7 +43,7 @@ B111111
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 BrightnessAuto brightAuto;
 TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
-TimeInterval brightnessAutoTrans(15000, 0, true); // 30 sec
+TimeInterval brightnessAutoTrans(15000, 0, true); // ms
 unsigned long lastBtnEvent = 0;
 /*** END SCREEN ***/
 

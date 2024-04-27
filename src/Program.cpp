@@ -45,6 +45,8 @@ BrightnessAuto brightAuto;
 TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
 TimeInterval brightnessAutoTrans(15000, 0, true); // ms
 unsigned long lastBtnEvent = 0;
+
+bool isHoldScreen = false; // Check if some screen needs to hold
 /*** END SCREEN ***/
 
 /**
@@ -189,6 +191,8 @@ void Program::pressIncrease() {
 
 void Program::update() {
   const auto ms = millis();
+  isHoldScreen = false;
+
   if (!justStarted) {
     screens[1]->begin(ms);
     justStarted = true;
@@ -240,6 +244,9 @@ void Program::update() {
     if (scr.targetState != state)
       continue;
 
+    // We will going to prevent changing the state of the screen
+    if(!isHoldScreen) isHoldScreen = scr.holdScreen();
+
     scr.update(ms);
     break;
   }
@@ -253,6 +260,14 @@ void Program::update() {
     _lastTime = ms;
   }
   /////////////////////////////
+
+  // Hold Current screen during requests.
+  // I don't know other method to do this
+  // I just figure this out. =)
+  if (isHoldScreen) {
+    recon.update(ms);
+    return;
+  }
 
   switch (state) {
   case E_PROGRAM_STATE::BOOT:

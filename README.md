@@ -1,49 +1,47 @@
-# arduino-greenhouse-temp-normalizer
+# Arduino Greenhouse Temperature Normalizer
+This document details an Arduino program named arduino-greenhouse-temp-normalizer designed to automatically regulate temperature within a greenhouse environment.
 
-An Arduino softwares that automatically turns on the exhaust fan
-if the humudity, temperature inside of a greenhouse is higher
-than expected.
-
-## Module in used
-- Arduino
-- LCD (16x2 I2C display)
-- DHT Sensor
-- Relay
-- Rotary Encoder
+## Components
+- Arduino Board
+- LCD Display (16x2 I2C)
+- DHT Sensor (Temperature & Humidity)
+- Relay Module (Controls Exhaust Fan)
+- Rotary Encoder (User Input)
 
 ## Circuit
- 
- ![Diagram](./schema/Diagram.png?raw=true)
 
-> Note: You can replace the red LED with a 
-> jumper that connects into the back of an
-> I2C display where the backlight is jumped.
-> With that, the I2C display will transition 
-> to dim and brighten the screen brightness
-> by interval. If the rotary encoder has been
-> moved or the critical temp (Threshold) is
-> equal below the current reading the
-> brightness of an I2C display will be fixed
-> at highest at possible.
+A circuit diagram illustrates the specific wiring connections between each component.
 
-## Extra
+![diagram](./schema/Diagram.png)
 
-You can also change the loading screen (boot screen)
-by going to `include/DEFINITION.h` and changing the 
-`USE_BLOCK_BOOT` into 1.
+> Note: The red LED can be replaced with a jumper connecting to the I2C display's backlight for adjustable brightness. The display will automatically dim or brighten based on user interaction (rotary encoder movement) or when critical temperature thresholds are reached.
 
-More config you can see there.
+## Usage
 
-## Social
+#### How to adjust the threshold (Critical Temp)
 
-If you have any question you can message me 
-via 
-- email `jovandeguia@gmail.com` 
-- [Facebook](https://facebook.com/deguia25) 
-- [Instagram](https://instagram.com/jxmked)
+Press the rotary encoder then rotate it clock wise or counter clock wise to adjust the threshold
 
-You can also send me a tip via
-- [Buymecoffee](https://buymeacoffee.com/jxmked)
+#### Screen dimming feature
 
-Contribution is open. Feel free to make changes. Thanks a lt. =)
+- Screen will dim automatically for a seconds then brighten for a few second.
+- If the rotary encoder has been rotated or pressed the screen brightness will
+brighten until a few second of no event happend from rotary encoder.
+- The brightness automatically locked on bright when the threshold (Critial temp) 
+is equal or lower than current temperature.
+
+## Customization
+
+The boot screen (initial display message) can be customized by editing the USE_BLOCK_BOOT value in the include/DEFINITION.h file. This file likely contains additional configuration options.
+
+## Contact & Contribution
+
+Feel free to reach out to the project creator, Jovan De Guia, for any questions or to contribute to the project's development.
+
+- Email: jovandeguia@gmail.com
+Facebook: [Jovan De Guia](https://facebook.com/deguia25)
+Instagram: [@jxmked](https://instagram.com/jxmked)
+
+Support the project via [Buy Me a Coffee](https://buymeacoffee.com/jxmked)
+
 

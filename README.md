@@ -39,8 +39,8 @@ The boot screen (initial display message) can be customized by editing the USE_B
 Feel free to reach out to the project creator, Jovan De Guia, for any questions or to contribute to the project's development.
 
 - Email: jovandeguia@gmail.com
-Facebook: [Jovan De Guia](https://facebook.com/deguia25)
-Instagram: [@jxmked](https://instagram.com/jxmked)
+- Facebook: [Jovan De Guia](https://facebook.com/deguia25)
+- Instagram: [@jxmked](https://instagram.com/jxmked)
 
 Support the project via [Buy Me a Coffee](https://buymeacoffee.com/jxmked)
 

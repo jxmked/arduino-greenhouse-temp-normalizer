@@ -37,9 +37,10 @@ More config you can see there.
 ## Social
 
 If you have any question you can message me 
-via email `jovandeguia@gmail.com` or sending 
-via [Facebook](https://facebook.com/deguia25) or 
-[Instagram](https://instagram.com/jxmked).
+via 
+- email `jovandeguia@gmail.com` 
+- [Facebook](https://facebook.com/deguia25) 
+- [Instagram](https://instagram.com/jxmked)
 
 You can also send me a tip via
 - [Buymecoffee](https://buymeacoffee.com/jxmked)

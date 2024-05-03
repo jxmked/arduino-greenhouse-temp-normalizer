@@ -38,8 +38,11 @@ More config you can see there.
 
 If you have any question you can message me 
 via email `jovandeguia@gmail.com` or sending 
-via facebook `https://fb.com/deguia25` or 
-instagram `https://instagrm.com/jxmked`.
+via [Facebook](https://facebook.com/deguia25) or 
+[Instagram](https://instagram.com/jxmked).
+
+You can also send me a tip via
+- [Buymecoffee](https://buymeacoffee.com/jxmked)
 
 Contribution is open. Feel free to make changes. Thanks a lt. =)
 

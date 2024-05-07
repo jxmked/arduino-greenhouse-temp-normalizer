@@ -42,6 +42,5 @@ Feel free to reach out to the project creator, Jovan De Guia, for any questions 
 - Facebook: [Jovan De Guia](https://facebook.com/deguia25)
 - Instagram: [@jxmked](https://instagram.com/jxmked)
 
-Support the project via [Buy Me a Coffee](https://buymeacoffee.com/jxmked)
-
+Support the project via [Buy Me a Coffee](https://buymeacoffee.com/jxmked) or [Paypal](https://www.paypal.me/jxmked)
 

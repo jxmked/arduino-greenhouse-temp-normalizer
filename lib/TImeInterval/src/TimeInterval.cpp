@@ -27,7 +27,7 @@ bool TimeInterval::marked(unsigned long holdMillis) {
   const unsigned long diff = currentTime - lastTime;
 
   if (diff >= interval) {
-    if (diff > holdMillis)
+    if (diff - interval >= holdMillis)
       lastTime = currentTime;
     return true;
   }

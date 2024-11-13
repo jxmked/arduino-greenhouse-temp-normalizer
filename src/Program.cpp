@@ -25,31 +25,29 @@
 #define maxThreshold 45
 volatile int THRESHOLD = 31;
 
-
 /** END DATA & CONFIG **/
 /**
  * Screen Object
-*/
+ */
 byte __SCREEN_BLOCK__[8] = {
-B111111,
-B111111,
-B111111,
-B111111,
-B111111,
-B111111,
-B111111,
-B111111
-};
+    B111111,
+    B111111,
+    B111111,
+    B111111,
+    B111111,
+    B111111,
+    B111111,
+    B111111};
 LiquidCrystal_I2C lcd(LCD_META.addr, LCD_META.rows, LCD_META.cols);
 BrightnessAuto brightAuto;
-TimeInterval lcd_hz(200, 0, true); // LCD Refresh Rate - 0.2 sec
+TimeInterval lcd_hz(200, 0, true);                // LCD Refresh Rate - 0.2 sec
 TimeInterval brightnessAutoTrans(15000, 0, true); // 30 sec
 unsigned long lastBtnEvent = 0;
 /*** END SCREEN ***/
 
 /**
  * DHT Sensor
-*/
+ */
 DHTSensor mainSensor = DHTSensor(PIN_DATA.DHT_Sensor);
 TimeInterval mainSensorHz = TimeInterval(2000, 0, true);
 
@@ -57,7 +55,7 @@ TimeInterval mainSensorHz = TimeInterval(2000, 0, true);
 
 /**
  * Relay Controller and Logic
-*/
+ */
 RelayController recon = RelayController(PIN_DATA.Fan_Relay);
 TemperatureController tempCont = TemperatureController();
 /** END RELAY CONTROLLER AND LOGIC */
@@ -65,18 +63,18 @@ TemperatureController tempCont = TemperatureController();
 /**
  * Screens
  */
-SShow_Thres* __showthres__ = new SShow_Thres();
-SHome* __shome__ = new SHome();
+SShow_Thres *__showthres__ = new SShow_Thres();
+SHome *__shome__ = new SHome();
 
-BaseScreen* screens[] = {
+BaseScreen *screens[] = {
     __showthres__,
     new SBoot(),
     new SInitial(),
-     __shome__ };
+    __shome__};
 
 const int screenLength = sizeof(screens) / sizeof(screens[0]);
 
-bool justStarted = false; // 
+bool justStarted = false; //
 
 /** END SCREENS */
 
@@ -99,9 +97,10 @@ bool isSystemActivated = false;
 bool isTransitionPaused = false;
 
 Program::Program() : state(E_PROGRAM_STATE::BOOT),
-currentInterval(0) { }
+                     currentInterval(0) {}
 
-void Program::begin() {
+void Program::begin()
+{
   const auto initialMillis = millis();
 
   /** Lets populate config with initial data **/
@@ -124,20 +123,24 @@ void Program::begin() {
   recon.begin();
   tempCont.begin();
 
-  for (int index = 0; index < screenLength; index++) {
-    BaseScreen& scr = *screens[index];
+  for (int index = 0; index < screenLength; index++)
+  {
+    BaseScreen &scr = *screens[index];
 
     scr.begin(initialMillis);
   }
 }
 
-void Program::show_threshold(unsigned long ms) {
+void Program::show_threshold(unsigned long ms)
+{
   state = E_PROGRAM_STATE::SHOW_THRESHOLD;
   _lastTime = ms;
 }
 
-void Program::pressEnter() {
-  if (!isReady) return;
+void Program::pressEnter()
+{
+  if (!isReady)
+    return;
   isSystemActivated = false;
   isTransitionPaused = true;
 
@@ -148,8 +151,10 @@ void Program::pressEnter() {
   show_threshold(millis());
 }
 
-void Program::pressDecrease() {
-  if (!isReady) return;
+void Program::pressDecrease()
+{
+  if (!isReady)
+    return;
 
   // brightAuto.targetBright = 100;
   lastBtnEvent = millis();
@@ -159,15 +164,18 @@ void Program::pressDecrease() {
   show_threshold(millis());
 #endif
 
-  if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
+  if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD)
+  {
     _lastTime = millis();
     THRESHOLD--;
     THRESHOLD = max(minThreshold, min(maxThreshold, THRESHOLD)); // limit
   }
 }
 
-void Program::pressIncrease() {
-  if (!isReady) return;
+void Program::pressIncrease()
+{
+  if (!isReady)
+    return;
 
   // brightAuto.targetBright = 100;
   lastBtnEvent = millis();
@@ -177,19 +185,21 @@ void Program::pressIncrease() {
   show_threshold(millis());
 #endif
 
-  if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD) {
+  if (!isSystemActivated && state == E_PROGRAM_STATE::SHOW_THRESHOLD)
+  {
     _lastTime = millis();
     THRESHOLD++;
     THRESHOLD = max(minThreshold, min(maxThreshold, THRESHOLD)); // limit
   }
 }
 
-
 /********** UPDATE ***********/
 
-void Program::update() {
+void Program::update()
+{
   const auto ms = millis();
-  if (!justStarted) {
+  if (!justStarted)
+  {
     screens[1]->begin(ms);
     justStarted = true;
   }
@@ -213,14 +223,18 @@ void Program::update() {
 
   const bool btnIvalEvtEnded = abs(ms - lastBtnEvent) >= AUTOBRIGHT_RESUME_AT;
 
-  if (btnIvalEvtEnded) {
+  if (btnIvalEvtEnded)
+  {
     brightnessAutoTrans.resume();
     isTransitionPaused = false;
   }
 
-  if (isReady && btnIvalEvtEnded && brightnessAutoTrans.marked(45000)) {
+  if (isReady && btnIvalEvtEnded && brightnessAutoTrans.marked(45000))
+  {
     brightAuto.targetBright = 0;
-  } else {
+  }
+  else
+  {
     brightAuto.targetBright = 100;
   }
 
@@ -228,14 +242,18 @@ void Program::update() {
 
   analogWrite(PIN_DATA.LCD_BLIGHT, map(brightAuto.brightness, 0, 100, 10, 156));
 
-  if (isReady && tempCont.isThresholdExceed()) {
+  if (isReady && tempCont.isThresholdExceed())
+  {
     recon.activate();
-  } else {
+  }
+  else
+  {
     recon.deactivate();
   }
 
-  for (int index = 0; index < screenLength; index++) {
-    BaseScreen& scr = *screens[index];
+  for (int index = 0; index < screenLength; index++)
+  {
+    BaseScreen &scr = *screens[index];
 
     if (scr.targetState != state)
       continue;
@@ -248,22 +266,26 @@ void Program::update() {
   // and time owner
   _timeOwner = state;
 
-  if (_timeOwner != _lastTimeOwner) {
+  if (_timeOwner != _lastTimeOwner)
+  {
     _lastTimeOwner = _timeOwner;
     _lastTime = millis();
   }
   /////////////////////////////
 
-  switch (state) {
+  switch (state)
+  {
   case E_PROGRAM_STATE::BOOT:
-    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval)) {
+    if (isDiffAchieved(millis(), _lastTime, screens[1]->screenInterval))
+    {
       state = E_PROGRAM_STATE::INITIAL;
     }
 
     break;
 
   case E_PROGRAM_STATE::INITIAL:
-    if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval)) {
+    if (isDiffAchieved(millis(), _lastTime, screens[2]->screenInterval))
+    {
       state = E_PROGRAM_STATE::SHOW_THRESHOLD;
     }
 
@@ -273,7 +295,8 @@ void Program::update() {
     isReady = true;
     isSystemActivated = false;
 #if SWITCH_HOME_THRESHOLD
-    if (!isTransitionPaused && isDiffAchieved(millis(), _lastTime, SWITCHING_INTERVAL)) {
+    if (!isTransitionPaused && isDiffAchieved(millis(), _lastTime, SWITCHING_INTERVAL))
+    {
       state = E_PROGRAM_STATE::SHOW_THRESHOLD;
       isSystemActivated = true;
     }
@@ -281,7 +304,8 @@ void Program::update() {
     break;
 
   case E_PROGRAM_STATE::SHOW_THRESHOLD:
-    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval)) {
+    if (isDiffAchieved(millis(), _lastTime, screens[0]->screenInterval))
+    {
       state = E_PROGRAM_STATE::HOME;
     }
 
@@ -294,17 +318,17 @@ void Program::update() {
   recon.update(ms);
 }
 
-
 /************** END UPDATE ***************/
-
 
 /************** DISPLAY ******************/
 
-void Program::display() {
+void Program::display()
+{
   if (!lcd_hz.marked())
     return;
-  for (int index = 0; index < screenLength; index++) {
-    BaseScreen& scr = *screens[index];
+  for (int index = 0; index < screenLength; index++)
+  {
+    BaseScreen &scr = *screens[index];
 
     if (scr.targetState != state)
       continue;
@@ -314,14 +338,13 @@ void Program::display() {
   }
 }
 
-
 /************ END DISPLAY ****************/
 
-
-E_PROGRAM_STATE Program::getState() {
+E_PROGRAM_STATE Program::getState()
+{
   return state;
 }
 
-void Program::configMode() {
-
+void Program::configMode()
+{
 }
